@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-flash.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zakikun.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#FF3030","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":true,"transition":{"post_block":"slideDownIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideDownIn","sidebar":"slideDownIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="搭建Seafile (WinServer 2019+Docker for Windows)">
+<meta property="og:url" content="https://blog.zakikun.vip/2020/03/07/%E6%90%AD%E5%BB%BASeafile-WinServer-2019-Docker-for-Windows/index.html">
+<meta property="og:site_name" content="Zakikun">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-06T21:54:53.000Z">
+<meta property="article:modified_time" content="2020-03-15T08:21:53.677Z">
+<meta property="article:author" content="Zakikun">
+<meta property="article:tag" content="技术">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blog.zakikun.vip/2020/03/07/%E6%90%AD%E5%BB%BASeafile-WinServer-2019-Docker-for-Windows/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>搭建Seafile (WinServer 2019+Docker for Windows) | Zakikun</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-159344419-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3c3461d1a92b20ede23a9960542cb89e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zakikun</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.zakikun.vip/2020/03/07/%E6%90%AD%E5%BB%BASeafile-WinServer-2019-Docker-for-Windows/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Zakikun">
+      <meta itemprop="description" content="写一写自己想写的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zakikun">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          搭建Seafile (WinServer 2019+Docker for Windows)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-07 05:54:53" itemprop="dateCreated datePublished" datetime="2020-03-07T05:54:53+08:00">2020-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-15 16:21:53" itemprop="dateModified" datetime="2020-03-15T16:21:53+08:00">2020-03-15</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<span id="more"></span>
+
+<p>更新1：建议数据库不要使用windows版，内建到Docker内作为独立容器运行</p>
+<h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">物理主机系统： Windows server 2019 Datecenter (v1809, 17763.805)</span><br><span class="line">Docker： Docker for windows 2.2.0.3 (Engine: 19.03.5, Compose: 1.25.4)</span><br><span class="line">Mariadb： Docker (mariadb:latest)</span><br><span class="line">Nginx： Docker (nginx:latest)</span><br><span class="line">Seafile： Pro专业版(docker.seafile.top&#x2F;seafileltd&#x2F;seafile-pro-mc:latest)</span><br><span class="line">#可选</span><br><span class="line">Onlyoffice-documentserver: Docker镜像(onlyoffice&#x2F;documentserver:latest)</span><br></pre></td></tr></table></figure>
+
+<h5 id="Docker-for-windows"><a href="#Docker-for-windows" class="headerlink" title="Docker for windows"></a>Docker for windows</h5><p>安装是全自动创建Docker Host的Hyper-V虚拟机</p>
+<h5 id="Mariadb-Docker"><a href="#Mariadb-Docker" class="headerlink" title="Mariadb Docker"></a>Mariadb Docker</h5><p>此处采用compose 3.0+让容器间通过同一个虚拟子网实现互通</p>
+<p><code>docker network create shared</code></p>
+<h6 id="Mariadb-Compose-db-yml"><a href="#Mariadb-Compose-db-yml" class="headerlink" title="Mariadb Compose (db.yml)"></a>Mariadb Compose (db.yml)</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  mariadb:</span><br><span class="line">    image: mariadb:latest</span><br><span class="line">    container_name: mariadb</span><br><span class="line">    command: --character-set-server&#x3D;utf8mb4 --collation-server&#x3D;utf8mb4_unicode_ci --innodb-flush-method&#x3D;fsync			#设置服务器字符集, 服务器连接排序规则, 以及innodb引擎flush方式</span><br><span class="line">    environment:</span><br><span class="line">      - MYSQL_ROOT_PASSWORD&#x3D;password  # 必须, 设置root账号的密码</span><br><span class="line">      - MYSQL_LOG_CONSOLE&#x3D;true</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;C&#x2F;Docker&#x2F;mariadb:&#x2F;var&#x2F;lib&#x2F;mysql  # 必须, 持久化存储数据文件</span><br><span class="line">      - &#x2F;C&#x2F;Docker&#x2F;mariadb-conf&#x2F;my.cnf:&#x2F;etc&#x2F;my.cnf #外挂my.cnf方便配置Mariadb</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line"># 一并部署phpmyadmin方便通过Web操作</span><br><span class="line">  phpmyadmin:</span><br><span class="line">    image: phpmyadmin&#x2F;phpmyadmin:4.9.4</span><br><span class="line">    container_name: phpmyadmin</span><br><span class="line">    environment:</span><br><span class="line">      - PMA_ARBITRARY&#x3D;1      # 允许pma访问不同数据库</span><br><span class="line">      - PMA_HOST&#x3D;mariadb	# 默认连接的数据库, 在同一子网内直接用service name代替</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared				#关键, 两个容器使用shared网络</span><br></pre></td></tr></table></figure>
+
+<p>保存, 加 -d 参数后台运行</p>
+<p><code>docker-compose -f .\db.yml up -d</code></p>
+<h4 id="主体搭建部署"><a href="#主体搭建部署" class="headerlink" title="主体搭建部署"></a>主体搭建部署</h4><p><a target="_blank" rel="noopener" href="https://cloud.seafile.com/published/seafile-manual-cn/docker/pro-edition/%E7%94%A8Docker%E9%83%A8%E7%BD%B2Seafile.md">官方文档</a></p>
+<p>使用Docker Compose可以一键搭建，具体参数自己酌情修改</p>
+<p>注意：经过我个人一个月的使用, elasticsearch数据如果外挂到windows系统，可能会因为文件系统权限或其他我未知的原因不停产生error，导致log不断蚕食硬盘空间，建议内置</p>
+<h6 id="Seafile-Compose-seafile-yml"><a href="#Seafile-Compose-seafile-yml" class="headerlink" title="Seafile Compose (seafile.yml)"></a>Seafile Compose (seafile.yml)</h6><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">memcached:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">memcached:1.5.6</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">seafile-memcached</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">entrypoint:</span> <span class="string">memcached</span> <span class="string">-m</span> <span class="number">256</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">default</span>										<span class="comment">#定义默认网络</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">seafileltd/elasticsearch-with-ik:5.6.16</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">seafile-elasticsearch</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">discovery.type=single-node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">bootstrap.memory_lock=true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;ES_JAVA_OPTS=-Xms1g -Xmx1g&quot;</span></span><br><span class="line">    <span class="attr">deploy:</span></span><br><span class="line">      <span class="attr">resources:</span></span><br><span class="line">        <span class="attr">limits:</span></span><br><span class="line">          <span class="attr">memory:</span> <span class="string">2048M</span>								<span class="comment">#限制最大内存</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">elasticsearch-data:/usr/share/elasticsearch/data</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">default</span>										<span class="comment">#定义默认网络</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">seafile:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.seafile.top/seafileltd/seafile-pro-mc:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">seafile</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">10002</span><span class="string">:443</span>								<span class="comment">#转发10002端口到seafile的443端口</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">D:/Docker/seafile/data:/shared</span>     			<span class="comment">#外挂Seafile主要的配置和数据文件</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">DB_HOST=mariadb</span>								<span class="comment">#数据库IP, 若容器互通自行修改对应名</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">DB_ROOT_PASSWD=rootpassword</span>					<span class="comment">#数据库root密码</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TIME_ZONE=Asia/Shanghai</span>						<span class="comment">#时区, 默认不用修改</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SEAFILE_ADMIN_EMAIL=example@gmail.com</span>		<span class="comment">#初始化seafile管理员账号</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SEAFILE_ADMIN_PASSWORD=password</span>				<span class="comment">#初始化seafile管理员账号密码</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SEAFILE_SERVER_LETSENCRYPT=false</span>			<span class="comment">#是否启用内建letsencrypt(自动申请、更新、部署证书)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SEAFILE_SERVER_HOSTNAME=domain.com</span>			<span class="comment">#seafile服务器域名(会影响后续配置文件生成)</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">memcached</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">elasticsearch</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">default</span>										<span class="comment">#定义默认网络</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">default:</span></span><br><span class="line">    <span class="attr">external:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">shared</span>								<span class="comment">#默认网络接入shared网络</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">elasticsearch-data:</span>							<span class="comment">#将elasticsearch的数据内置并持久化</span></span><br></pre></td></tr></table></figure>
+
+<p>保存, 加 -d 参数后台运行</p>
+<p><code>docker-compose -f .\seafile.yml up -d</code></p>
+<p>出现如下信息，就可以通过 <a target="_blank" rel="noopener" href="http://domain.com:10002/">http://domain.com:10002</a> 访问seafile的网页界面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Starting seahub at port 8000 ...</span><br><span class="line">Seahub is started</span><br><span class="line">Done.</span><br></pre></td></tr></table></figure>
+
+<h5 id="启用HTTPS访问"><a href="#启用HTTPS访问" class="headerlink" title="启用HTTPS访问"></a>启用HTTPS访问</h5><p>Seafile的镜像默认会生成持久化的nginx配置文件 (在/shared/nginx/seafile.nginx.conf)</p>
+<ol>
+<li>修改监听80端口的server模块中url rewrite部分以及proxy_set_header部分</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">location &#x2F; &#123;</span><br><span class="line">        rewrite ^ https:&#x2F;&#x2F;domain.com:10002$request_uri? permanent;</span><br><span class="line">    &#125;</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">proxy_set_header Host $host:10002;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>根据443端口监听部分放置ssl证书和私钥文件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssl_certificate      &#x2F;shared&#x2F;ssl&#x2F;fullchain.cer;</span><br><span class="line">ssl_certificate_key  &#x2F;shared&#x2F;ssl&#x2F;private.key;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>访问<a target="_blank" rel="noopener" href="https://domain.com:10002/">https://domain.com:10002</a>，以管理员账号登录，点击右上角头像进入“系统管理”，输入密码后左侧点击“设置”</li>
+</ol>
+<p>修改以下部分 (如果修改错误的话，会无法正常使用网页界面和下载/上传文件)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SERVICE_URL				https:&#x2F;&#x2F;domain.com:10002</span><br><span class="line">FILE_SERVER_ROOT		https:&#x2F;&#x2F;domain.com:10002&#x2F;seafhttp</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>修改/shared/seafile/conf/seahub_settings.py，添加以下内容</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">USE_X_FORWARDED_HOST &#x3D; True</span><br><span class="line">SECURE_PROXY_SSL_HEADER &#x3D; (&#39;HTTP_X_FORWARDED_PROTO&#39;, &#39;https&#39;)</span><br></pre></td></tr></table></figure>
+
+<p>至此，Seafile基本上就可以正常通过HTTPS访问使用</p>
+<h4 id="可选配置修改"><a href="#可选配置修改" class="headerlink" title="可选配置修改"></a>可选配置修改</h4><p><a target="_blank" rel="noopener" href="https://docs.seafile.com/published/seafile-manual-cn/config/README.md">官方文档</a></p>
+<h5 id="启用webdav"><a href="#启用webdav" class="headerlink" title="启用webdav"></a>启用webdav</h5><p>修改/shared/seafile/conf/seafdav.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[WEBDAV]</span><br><span class="line">enabled &#x3D; true</span><br><span class="line">port &#x3D; 8080</span><br><span class="line">fastcgi &#x3D; true</span><br><span class="line">share_name &#x3D; &#x2F;seafdav</span><br></pre></td></tr></table></figure>
+
+<h5 id="配置seafile-conf"><a href="#配置seafile-conf" class="headerlink" title="配置seafile.conf"></a>配置seafile.conf</h5><p>可添加以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">[fileserver]</span><br><span class="line">## Seafile tcp 端口 (不要修改该设置)</span><br><span class="line">port &#x3D; 8082</span><br><span class="line"></span><br><span class="line">#设置用于服务 http 请求的线程数,默认值是10个线程</span><br><span class="line">worker_threads &#x3D; 30</span><br><span class="line"></span><br><span class="line"># 取消上传文件大小限制, 默认最大为200M.</span><br><span class="line">max_upload_size&#x3D;0</span><br><span class="line"></span><br><span class="line"># 取消下载文件大小限制, 默认最大为200M.</span><br><span class="line">max_download_dir_size&#x3D;0</span><br><span class="line"></span><br><span class="line">#定义索引中并发线程的数量</span><br><span class="line">#max_indexing_threads &#x3D; 2</span><br><span class="line"></span><br><span class="line">#Web界面上传文件时块大小(MB)</span><br><span class="line">#fixed_block_size&#x3D;2</span><br><span class="line"></span><br><span class="line">#当用户上传文件时,文件服务器分配一个令牌来授权上传操作.该令牌默认有效期1小时,通过WAN上传大型文件时,上传时间可能会超过1小时,您可以将令牌到期时间更改为更大的值.</span><br><span class="line">web_token_expire_time&#x3D;3600</span><br><span class="line"></span><br><span class="line">#从Web界面下载文件夹为zip存档时windows可能不支持UTF-8</span><br><span class="line">windows_encoding &#x3D; iso-8859-1</span><br><span class="line"></span><br><span class="line">[database]</span><br><span class="line">#连接池大小,默认100</span><br><span class="line">max_connections &#x3D; 200</span><br><span class="line"></span><br><span class="line">[library_trash]</span><br><span class="line">#资料库回收站清理周期</span><br><span class="line">expire_days &#x3D; 30</span><br><span class="line"></span><br><span class="line">[history]</span><br><span class="line">#对所有的资料库设置一个默认的文件历史保留天数</span><br><span class="line">keep_days &#x3D; 7</span><br></pre></td></tr></table></figure>
+
+<h5 id="配置seahub-settings-py"><a href="#配置seahub-settings-py" class="headerlink" title="配置seahub_settings.py"></a>配置seahub_settings.py</h5><p><a target="_blank" rel="noopener" href="https://manual-cn-origin.seafile.com/config/seahub_settings_py">官方文档</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#启用断点续传</span><br><span class="line">#限制：</span><br><span class="line">#只支持重新上传；文件更新和文件夹上传无法断点续传</span><br><span class="line">#只支持 Chrome, Firefox, IE 10+</span><br><span class="line">ENABLE_RESUMABLE_FILEUPLOAD &#x3D; True</span><br><span class="line"></span><br><span class="line"># 开启邮件提醒服务 (用户重置密码, 管理员增加新用户, 管理员重置用户密码, 用户发送分享外链和上传外链)</span><br><span class="line"># 启用587端口 TLS连接</span><br><span class="line">#EMAIL_USE_TLS &#x3D; True</span><br><span class="line"># 启用465端口 SSL连接</span><br><span class="line">#EMAIL_USE_SSL &#x3D; True</span><br><span class="line">EMAIL_USE_TLS &#x3D; False</span><br><span class="line">EMAIL_HOST &#x3D; &#39;smtp.domain.com&#39;			# smpt 服务器</span><br><span class="line">EMAIL_HOST_USER &#x3D; &#39;username@domain.com&#39;    # 用户名和域名</span><br><span class="line">EMAIL_HOST_PASSWORD &#x3D; &#39;password&#39;			# 密码</span><br><span class="line">EMAIL_PORT &#x3D; &#39;25&#39;						# 端口</span><br><span class="line">DEFAULT_FROM_EMAIL &#x3D; EMAIL_HOST_USER</span><br><span class="line">SERVER_EMAIL &#x3D; EMAIL_HOST_USER</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="可选部分"><a href="#可选部分" class="headerlink" title="可选部分"></a>可选部分</h4><h5 id="集成Onlyoffice-documentserver"><a href="#集成Onlyoffice-documentserver" class="headerlink" title="集成Onlyoffice-documentserver"></a>集成Onlyoffice-documentserver</h5><h6 id="部署Onlyoffice-documentserver"><a href="#部署Onlyoffice-documentserver" class="headerlink" title="部署Onlyoffice documentserver"></a>部署Onlyoffice documentserver</h6><p><a target="_blank" rel="noopener" href="https://manual-cn-origin.seafile.com/deploy_pro/office-wen-jian-yu-lan-he-bian-ji/only_office">官方文档</a></p>
+<p>(推荐) 或者将Onlyoffice-documentserver集成到同一个Compose文件中</p>
+<p>Compose File (seafile-onlyoffice.yml)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  memcached:</span><br><span class="line">    image: memcached:1.5.6</span><br><span class="line">    container_name: seafile-memcached</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    entrypoint: memcached -m 256</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line"></span><br><span class="line">  elasticsearch:</span><br><span class="line">    image: seafileltd&#x2F;elasticsearch-with-ik:5.6.16</span><br><span class="line">    container_name: seafile-elasticsearch</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    environment:</span><br><span class="line">      - discovery.type&#x3D;single-node</span><br><span class="line">      - bootstrap.memory_lock&#x3D;true</span><br><span class="line">      - &quot;ES_JAVA_OPTS&#x3D;-Xms1g -Xmx1g&quot;</span><br><span class="line">    deploy:</span><br><span class="line">      resources:</span><br><span class="line">        limits:</span><br><span class="line">          memory: 2048M</span><br><span class="line">    volumes:</span><br><span class="line">      - elasticsearch-data:&#x2F;usr&#x2F;share&#x2F;elasticsearch&#x2F;data</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line"></span><br><span class="line">  seafile:</span><br><span class="line">    image: docker.seafile.top&#x2F;seafileltd&#x2F;seafile-pro-mc:latest</span><br><span class="line">    container_name: seafile</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - 10002:443</span><br><span class="line">    volumes:</span><br><span class="line">      - D:&#x2F;Docker&#x2F;seafile&#x2F;data:&#x2F;shared</span><br><span class="line">    environment:</span><br><span class="line">      - DB_HOST&#x3D;192.168.9.13</span><br><span class="line">      - DB_ROOT_PASSWD&#x3D;password</span><br><span class="line">      - TIME_ZONE&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - SEAFILE_ADMIN_EMAIL&#x3D;example@gmail.com</span><br><span class="line">      - SEAFILE_ADMIN_PASSWORD&#x3D;password</span><br><span class="line">      - SEAFILE_SERVER_LETSENCRYPT&#x3D;false</span><br><span class="line">      - SEAFILE_SERVER_HOSTNAME&#x3D;domain.com</span><br><span class="line">    depends_on:</span><br><span class="line">      - memcached</span><br><span class="line">      - elasticsearch</span><br><span class="line">      - onlyoffice-document-server</span><br><span class="line">      - onlyoffice-redis</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line"></span><br><span class="line">  onlyoffice-document-server:</span><br><span class="line">    container_name: onlyoffice-documentserver</span><br><span class="line">    image: onlyoffice&#x2F;documentserver:latest</span><br><span class="line">    stdin_open: true</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    environment:</span><br><span class="line">      - ONLYOFFICE_HTTPS_HSTS_ENABLED&#x3D;True									#启用HSTS</span><br><span class="line">      - SSL_CERTIFICATE_PATH&#x3D;&#x2F;var&#x2F;www&#x2F;onlyoffice&#x2F;Data&#x2F;certs&#x2F;fullchain.cer	#指定证书路径</span><br><span class="line">      - SSL_KEY_PATH&#x3D;&#x2F;var&#x2F;www&#x2F;onlyoffice&#x2F;Data&#x2F;certs&#x2F;private.key				#指定私钥路径</span><br><span class="line">      - REDIS_SERVER_HOST&#x3D;onlyoffice-redis</span><br><span class="line">      - REDIS_SERVER_PORT&#x3D;6379</span><br><span class="line">    deploy:</span><br><span class="line">      resources:</span><br><span class="line">        limits:</span><br><span class="line">          cpus: &#39;0.50&#39;						#限制最大CPU占用率</span><br><span class="line">          memory: 2048M						#限制最大内存</span><br><span class="line">    volumes:</span><br><span class="line">      - D:&#x2F;Docker&#x2F;onlyoffice&#x2F;DocumentServer&#x2F;logs:&#x2F;var&#x2F;log&#x2F;onlyoffice</span><br><span class="line">      - D:&#x2F;Docker&#x2F;onlyoffice&#x2F;DocumentServer&#x2F;data:&#x2F;var&#x2F;www&#x2F;onlyoffice&#x2F;Data</span><br><span class="line">      - D:&#x2F;Docker&#x2F;onlyoffice&#x2F;DocumentServer&#x2F;lib:&#x2F;var&#x2F;lib&#x2F;onlyoffice</span><br><span class="line">    ports:</span><br><span class="line">      - 10005:443							#服务访问端口, 80 HTTP, 443 HTTPS</span><br><span class="line">    depends_on:</span><br><span class="line">      - onlyoffice-redis</span><br><span class="line">    networks:</span><br><span class="line">      - seafile-net</span><br><span class="line"></span><br><span class="line">  onlyoffice-redis:</span><br><span class="line">    container_name: onlyoffice-redis</span><br><span class="line">    image: redis</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    networks:</span><br><span class="line">      - seafile-net</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;6379&#39;</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared							#接入shared网络</span><br><span class="line">  </span><br><span class="line">volumes:</span><br><span class="line">  elasticsearch-data:</span><br></pre></td></tr></table></figure>
+
+<p>通过访问<a target="_blank" rel="noopener" href="https://example.com:10005/">https://domain.com:10005</a>可以查看Document Server运行状况，显示Document Server is running表示成功</p>
+<h6 id="配置seahub-settings-py-1"><a href="#配置seahub-settings-py-1" class="headerlink" title="配置seahub_settings.py"></a>配置seahub_settings.py</h6><p>添加以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 开启 Only Office 服务</span><br><span class="line">ENABLE_ONLYOFFICE &#x3D; True</span><br><span class="line">VERIFY_ONLYOFFICE_CERTIFICATE &#x3D; True</span><br><span class="line">ONLYOFFICE_APIJS_URL &#x3D; &#39;https:&#x2F;&#x2F;domain.com:10005&#x2F;web-apps&#x2F;apps&#x2F;api&#x2F;documents&#x2F;api.js&#39;</span><br><span class="line">ONLYOFFICE_FILE_EXTENSION &#x3D; (&#39;doc&#39;, &#39;docx&#39;, &#39;ppt&#39;, &#39;pptx&#39;, &#39;xls&#39;, &#39;xlsx&#39;, &#39;odt&#39;, &#39;fodt&#39;, &#39;odp&#39;, &#39;fodp&#39;, &#39;ods&#39;, &#39;fods&#39;)</span><br><span class="line">ONLYOFFICE_EDIT_FILE_EXTENSION &#x3D; (&#39;docx&#39;, &#39;pptx&#39;, &#39;xlsx&#39;)</span><br></pre></td></tr></table></figure>
+
+<h6 id="重启Seahub"><a href="#重启Seahub" class="headerlink" title="重启Seahub"></a>重启Seahub</h6><p>如果/shared/seafile/conf/seahub_settings.pyc已存在，删除该文件，运行命令重启Seahub (Seafile的网页端界面服务)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it seafile &#x2F;opt&#x2F;seafile&#x2F;seafile-server-latest&#x2F;seahub.sh restart</span><br></pre></td></tr></table></figure>
+
+<h4 id="数据备份"><a href="#数据备份" class="headerlink" title="数据备份"></a>数据备份</h4><p><a target="_blank" rel="noopener" href="https://cloud.seafile.com/published/seafile-manual-cn/maintain/backup_recovery.md">官方文档</a></p>
+<h5 id="数据库备份"><a href="#数据库备份" class="headerlink" title="数据库备份"></a>数据库备份</h5><h6 id="通过计划任务-PowerShell-容器内shell脚本备份-数据库在容器内运行"><a href="#通过计划任务-PowerShell-容器内shell脚本备份-数据库在容器内运行" class="headerlink" title="通过计划任务 + PowerShell + 容器内shell脚本备份 (数据库在容器内运行)"></a>通过计划任务 + PowerShell + 容器内shell脚本备份 (数据库在容器内运行)</h6><p>/var/lib/mysql/backup.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">#创建backup目录并备份多个数据库</span><br><span class="line">mkdir -p &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;backup</span><br><span class="line">cd &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;backup</span><br><span class="line">for i in ccnet_db seahub_db seafile_db;</span><br><span class="line">do</span><br><span class="line">    mkdir -p $i</span><br><span class="line">    mysqldump --user&#x3D;root --password&#x3D;password $i &gt; .&#x2F;$i&#x2F;$i&quot;_&quot;$(date +%Y%m%d_%H%M%S).sql</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p>D:\database_backup\mariadbdump.ps1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#运行shell脚本, 复制.sql到备份盘, 清理backup目录</span><br><span class="line">docker exec -it mariadb &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;backup.sh</span><br><span class="line">Copy-Item -Recurse -Path &quot;C:\Docker\mariadb\backup\*&quot; -Destination &quot;D:\database_backup&quot;</span><br><span class="line">docker exec -it mariadb rm -r &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;backup</span><br></pre></td></tr></table></figure>
+
+<p>设置Windows自带的计划任务，操作-启动程序-PowerShell，添加参数 D:\database_backup\mariadbdump.ps1</p>
+<h6 id="通过bat备份-数据库在Windows系统上运行"><a href="#通过bat备份-数据库在Windows系统上运行" class="headerlink" title="通过bat备份 (数据库在Windows系统上运行)"></a>通过bat备份 (数据库在Windows系统上运行)</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">@title MySQL backup start</span><br><span class="line">@echo off</span><br><span class="line">setlocal enabledelayedexpansion</span><br><span class="line">@color 0a</span><br><span class="line">:: --------------------参数设置------------------------</span><br><span class="line">:: 设置时间变量</span><br><span class="line">set &quot;Ymd&#x3D;%date:~0,4%_%date:~5,2%_%date:~8,2%_%time:~0,2%_%time:~3,2%_%time:~6,2%&quot;</span><br><span class="line">:: 要备份的数据库名称，多个用空格分隔</span><br><span class="line">set DATABASES&#x3D;ccnet_db seafile_db seahub_db</span><br><span class="line">:: HOST IP</span><br><span class="line">set HOST&#x3D;127.0.0.1</span><br><span class="line">:: PROT 端口</span><br><span class="line">set PROT&#x3D;3306</span><br><span class="line">:: MySQL 用户名</span><br><span class="line">set USERNAME&#x3D;root</span><br><span class="line">:: MySQL 密码</span><br><span class="line">set PASSWORD&#x3D;password</span><br><span class="line">:: MySQL Bin 目录，加 \</span><br><span class="line">:: 如果可以直接使用 mysqldump（安装时添加 MySQL Bin 目录到了环境变量），此处留空即可</span><br><span class="line">set MYSQL&#x3D;</span><br><span class="line">:: WinRAR 自带命令行工具的可执行文件路径，长文件名注意用 Dos 长文件名书写方式</span><br><span class="line">set WINRAR&#x3D;C:\Progra~1\WinRAR\Rar.exe</span><br><span class="line">:: 备份天数</span><br><span class="line">set DT&#x3D;30</span><br><span class="line">:: 备份放置的盘，加 \</span><br><span class="line">set BACKUP_PATH&#x3D;D:\</span><br><span class="line">:: my.ini路径，加\</span><br><span class="line">set MYINI&#x3D;C:\mysql-winx64\</span><br><span class="line">:: 备份放置的路径，加 \</span><br><span class="line">set FILE&#x3D;mysql_backup\</span><br><span class="line">:: --------------------开始备份------------------------</span><br><span class="line">for %%D in (%DATABASES%) do (</span><br><span class="line">     if exist %BACKUP_PATH%%FILE%%%D (</span><br><span class="line">        echo 目录%BACKUP_PATH%%FILE%%%D已存在，无需创建</span><br><span class="line">    ) else (</span><br><span class="line">        echo 创建%BACKUP_PATH%%FILE%%%D        </span><br><span class="line">        md %BACKUP_PATH%%FILE%%%D</span><br><span class="line">    )</span><br><span class="line">    :: 备份</span><br><span class="line">    mysqldump --opt --single-transaction&#x3D;TRUE --user&#x3D;%USERNAME% --password&#x3D;%PASSWORD% --host&#x3D;%HOST% --protocol&#x3D;tcp --port&#x3D;%PROT% --default-character-set&#x3D;utf8 --single-transaction&#x3D;TRUE --routines --events &quot;%%D&quot; &gt; &quot;%BACKUP_PATH%%FILE%%%D\%%D_%Ymd%.sql&quot;</span><br><span class="line">)</span><br><span class="line">:: --------------------结束备份------------------------</span><br><span class="line">@echo on</span><br></pre></td></tr></table></figure>
+
+<h5 id="资料库数据备份"><a href="#资料库数据备份" class="headerlink" title="资料库数据备份"></a>资料库数据备份</h5><p>备份/shared文件夹</p>
+<h4 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h4><h5 id="恢复资料库数据"><a href="#恢复资料库数据" class="headerlink" title="恢复资料库数据"></a>恢复资料库数据</h5><p>根据Seafile的部署volume，将/shared文件夹复制到对应路径</p>
+<h5 id="恢复数据库"><a href="#恢复数据库" class="headerlink" title="恢复数据库"></a>恢复数据库</h5><p>建议使用命令行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql -u[username] -p[password] ccnet-db &lt; ccnet-db.sql.2013-10-19-16-00-05</span><br><span class="line">mysql -u[username] -p[password] seafile-db &lt; seafile-db.sql.2013-10-19-16-00-20</span><br><span class="line">mysql -u[username] -p[password] seahub-db &lt; seahub-db.sql.2013-10-19-16-01-05</span><br></pre></td></tr></table></figure>
+
+<h4 id="资料库修复-amp-文件导出"><a href="#资料库修复-amp-文件导出" class="headerlink" title="资料库修复&amp;文件导出"></a>资料库修复&amp;文件导出</h4><p><a target="_blank" rel="noopener" href="https://docs.seafile.com/published/seafile-manual-cn/maintain/seafile_fsck.md">官方文档</a></p>
+<p>Seafile 服务器包含了 <code>seafile-fsck</code> 工具来帮助你恢复这些毁坏的对象（类似于git-fsck工具）。这个工具将会进行如下三项工作：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 检查 Seafile 内部对象的完整性，并且删除毁坏的对象。</span><br><span class="line"><span class="bullet">2.</span> 恢复所有受影响的资料库到最近一致，可用的状态。</span><br><span class="line"><span class="bullet">3.</span> 导出数据库。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seafile-server-latest/seaf-fsck.sh [--repair|-r] [repo<span class="emphasis">_id_</span>1] [repo<span class="emphasis">_id_</span>2] ...</span><br></pre></td></tr></table></figure>
+
+<p>seaf-fsck 有检查资料库完整性和修复损坏资料库两种运行模式。</p>
+<hr>
+<h5 id="检查资料库完整性"><a href="#检查资料库完整性" class="headerlink" title="检查资料库完整性"></a>检查资料库完整性</h5><p>执行 seaf-fsck.sh 不加任何参数将以<strong>只读</strong>方式检查所有资料库的完整性。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seafile-server-latest/seaf-fsck.sh [library-id1] [library-id2] ...</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="修复损坏的资料库"><a href="#修复损坏的资料库" class="headerlink" title="修复损坏的资料库"></a>修复损坏的资料库</h5><p>fsck 修复损坏的资料库有如下两步流程:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 如果记录在数据库中的资料库当前状态无法在数据目录中找出，fsck 将会在数据目录中找到最近可用状态。</span><br><span class="line"><span class="bullet">2.</span> 检查第一步中可用状态的完整性。如果文件或目录损坏，fsck 将会将其置空并报告损坏的路径，用户便可根据损坏的路径来进行恢复操作。</span><br></pre></td></tr></table></figure>
+
+<p>执行如下命令来修复所有资料库：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seafile-server-latest/seaf-fsck.sh --repair</span><br></pre></td></tr></table></figure>
+
+<p>大多数情况下我们建议你首先以只读方式检查资料库的完整性，找出损坏的资料库后，执行如下命令来修复指定的资料库：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seafile-server-latest/seaf-fsck.sh --repair [library-id1] [library-id2] ...</span><br></pre></td></tr></table></figure>
+
+<p>seaf-fsck 会自动将改资料库的所有同步客户端解除同步。用户需要重新同步该资料库。seaf-fsck 也会在资料库的历史中添加一个损坏文件和目录的列表，便于用户找到损坏的路径。</p>
+<hr>
+<h5 id="将资料库导出到文件系统"><a href="#将资料库导出到文件系统" class="headerlink" title="将资料库导出到文件系统"></a>将资料库导出到文件系统</h5><p>4.2.0版本以后，您可以使用seaf-fsck将资料库中的所有文件导出到外部文件系统(如Ext4)。该程序不依赖于 seafile 数据库。只要你有 seafile-data 目录，你可以随时将文件从seafile导出到外部文件系统。</p>
+<p>命令语法是</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seafile-server-latest/seaf-fsck.sh --export top<span class="emphasis">_export_</span>path [library-id1] [library-id2] ...</span><br></pre></td></tr></table></figure>
+
+<p>参数 top_export_path 是放置导出文件的目录。每个资料库将导出为导出目录的子目录。如果不指定资料库的ID，将导出所有库。</p>
+<p>目前只能导出未加密的资料库，加密资料库将被跳过。</p>
+<h4 id="垃圾清理-amp-回收"><a href="#垃圾清理-amp-回收" class="headerlink" title="垃圾清理&amp;回收"></a>垃圾清理&amp;回收</h4><p>Seafile 利用存储去重技术来减少存储资源的利用。 简单来说，这包含如下两层含义：</p>
+<ul>
+<li>不同版本的文件或许会共享一些数据块。</li>
+<li>不同的资料库也或许会共享一些数据块。</li>
+</ul>
+<p>垃圾回收程序将会清理如下两种无用数据块：</p>
+<ol>
+<li>未被资料库所引用的数据块即数据块属于被删除的资料库。</li>
+<li>设置了历史长度限制的资料库的过期数据块。</li>
+</ol>
+<h5 id="Dry-run-模式"><a href="#Dry-run-模式" class="headerlink" title="Dry-run 模式"></a>Dry-run 模式</h5><p>如果仅为了查看有多少垃圾可以回收而不进行删除操作，用 dry-run 选项：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seafile-server-latest/seaf-gc.sh --dry-run [repo-id1] [repo-id2] ...</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="删除垃圾数据块"><a href="#删除垃圾数据块" class="headerlink" title="删除垃圾数据块"></a>删除垃圾数据块</h5><p>运行垃圾回收程序，不加 –dry-run 选项来删除垃圾数据块：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seafile-server-latest/seaf-gc.sh [repo-id1] [repo-id2] ...</span><br></pre></td></tr></table></figure>
+
+<p>如果在参数中指定资料库 ID, 则程序只检查和删除指定的资料库。</p>
+<p>正如前面所说，有两种类型的垃圾数据块可被回收，有时仅删除第一类无用数据块（属于删除的资料库）便可达到回收的目的，这种情况下，垃圾回收程序将不会检查未被删除的资料库，加入 “-r” 选项便可实现这个功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seafile-server-latest&#x2F;seaf-gc.sh -r</span><br></pre></td></tr></table></figure>
+
+<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4><p>主要优点：</p>
+<ul>
+<li><p>Seafile基于C语言，运行速度和稳定性都比基于PHP的NextCloud要好</p>
+</li>
+<li><p>用户可创建加密数据库，所有数据在服务器加密</p>
+</li>
+<li><p>数据在服务器上被分块存储，支持增量同步</p>
+</li>
+<li><p>支持在线预览mp4电影，在线编辑txt、Markdown</p>
+</li>
+<li><p>默认支持保存文件历史，方便回滚</p>
+</li>
+</ul>
+<p>主要缺点：</p>
+<ul>
+<li>数据基于分块存储，意味着不能在服务器上直接查看&amp;备份原始文件</li>
+<li>基于分块存储，随着使用会不可避免地产生垃圾数据块</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zakikun
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://blog.zakikun.vip/2020/03/07/%E6%90%AD%E5%BB%BASeafile-WinServer-2019-Docker-for-Windows/" title="搭建Seafile (WinServer 2019+Docker for Windows)">https://blog.zakikun.vip/2020/03/07/搭建Seafile-WinServer-2019-Docker-for-Windows/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/28/%E7%AE%80%E5%8D%95%E5%9C%B0%E6%8F%90%E5%8D%87Windows%E4%BD%BF%E7%94%A8%E6%95%88%E7%8E%87/" rel="prev" title="简单地提升Windows使用效率">
+      <i class="fa fa-chevron-left"></i> 简单地提升Windows使用效率
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/15/%E6%90%AD%E5%BB%BA%E7%A7%81%E4%BA%BA%E5%9B%BE%E5%BA%8A-Minio-PicUploader/" rel="next" title="搭建私人图床 (Minio+PicUploader))">
+      搭建私人图床 (Minio+PicUploader)) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Docker-for-windows"><span class="nav-number">1.1.</span> <span class="nav-text">Docker for windows</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Mariadb-Docker"><span class="nav-number">1.2.</span> <span class="nav-text">Mariadb Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Mariadb-Compose-db-yml"><span class="nav-number">1.2.1.</span> <span class="nav-text">Mariadb Compose (db.yml)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E4%BD%93%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2"><span class="nav-number">2.</span> <span class="nav-text">主体搭建部署</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Seafile-Compose-seafile-yml"><span class="nav-number">2.0.1.</span> <span class="nav-text">Seafile Compose (seafile.yml)</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%90%AF%E7%94%A8HTTPS%E8%AE%BF%E9%97%AE"><span class="nav-number">2.1.</span> <span class="nav-text">启用HTTPS访问</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E9%80%89%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9"><span class="nav-number">3.</span> <span class="nav-text">可选配置修改</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%90%AF%E7%94%A8webdav"><span class="nav-number">3.1.</span> <span class="nav-text">启用webdav</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEseafile-conf"><span class="nav-number">3.2.</span> <span class="nav-text">配置seafile.conf</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEseahub-settings-py"><span class="nav-number">3.3.</span> <span class="nav-text">配置seahub_settings.py</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E9%80%89%E9%83%A8%E5%88%86"><span class="nav-number">4.</span> <span class="nav-text">可选部分</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9B%86%E6%88%90Onlyoffice-documentserver"><span class="nav-number">4.1.</span> <span class="nav-text">集成Onlyoffice-documentserver</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2Onlyoffice-documentserver"><span class="nav-number">4.1.1.</span> <span class="nav-text">部署Onlyoffice documentserver</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEseahub-settings-py-1"><span class="nav-number">4.1.2.</span> <span class="nav-text">配置seahub_settings.py</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%87%8D%E5%90%AFSeahub"><span class="nav-number">4.1.3.</span> <span class="nav-text">重启Seahub</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD"><span class="nav-number">5.</span> <span class="nav-text">数据备份</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD"><span class="nav-number">5.1.</span> <span class="nav-text">数据库备份</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1-PowerShell-%E5%AE%B9%E5%99%A8%E5%86%85shell%E8%84%9A%E6%9C%AC%E5%A4%87%E4%BB%BD-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9C%A8%E5%AE%B9%E5%99%A8%E5%86%85%E8%BF%90%E8%A1%8C"><span class="nav-number">5.1.1.</span> <span class="nav-text">通过计划任务 + PowerShell + 容器内shell脚本备份 (数据库在容器内运行)</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%80%9A%E8%BF%87bat%E5%A4%87%E4%BB%BD-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9C%A8Windows%E7%B3%BB%E7%BB%9F%E4%B8%8A%E8%BF%90%E8%A1%8C"><span class="nav-number">5.1.2.</span> <span class="nav-text">通过bat备份 (数据库在Windows系统上运行)</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B5%84%E6%96%99%E5%BA%93%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD"><span class="nav-number">5.2.</span> <span class="nav-text">资料库数据备份</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-number">6.</span> <span class="nav-text">数据恢复</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%81%A2%E5%A4%8D%E8%B5%84%E6%96%99%E5%BA%93%E6%95%B0%E6%8D%AE"><span class="nav-number">6.1.</span> <span class="nav-text">恢复资料库数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%81%A2%E5%A4%8D%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">6.2.</span> <span class="nav-text">恢复数据库</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B5%84%E6%96%99%E5%BA%93%E4%BF%AE%E5%A4%8D-amp-%E6%96%87%E4%BB%B6%E5%AF%BC%E5%87%BA"><span class="nav-number">7.</span> <span class="nav-text">资料库修复&amp;文件导出</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E8%B5%84%E6%96%99%E5%BA%93%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="nav-number">7.1.</span> <span class="nav-text">检查资料库完整性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E6%8D%9F%E5%9D%8F%E7%9A%84%E8%B5%84%E6%96%99%E5%BA%93"><span class="nav-number">7.2.</span> <span class="nav-text">修复损坏的资料库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B0%86%E8%B5%84%E6%96%99%E5%BA%93%E5%AF%BC%E5%87%BA%E5%88%B0%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">7.3.</span> <span class="nav-text">将资料库导出到文件系统</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%B8%85%E7%90%86-amp-%E5%9B%9E%E6%94%B6"><span class="nav-number">8.</span> <span class="nav-text">垃圾清理&amp;回收</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Dry-run-%E6%A8%A1%E5%BC%8F"><span class="nav-number">8.1.</span> <span class="nav-text">Dry-run 模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%9E%83%E5%9C%BE%E6%95%B0%E6%8D%AE%E5%9D%97"><span class="nav-number">8.2.</span> <span class="nav-text">删除垃圾数据块</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">9.</span> <span class="nav-text">结语</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zakikun"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Zakikun</p>
+  <div class="site-description" itemprop="description">写一写自己想写的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wyxls" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wyxls" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wyxls123@gmail.com" title="E-Mail → mailto:wyxls123@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/wyxls" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;wyxls" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/RoxasCheng" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;RoxasCheng" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/54611" title="BiliBili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;54611" rel="noopener" target="_blank"><i class="fas fa-tv fa-fw"></i>BiliBili</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zakikun</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278645801&web_id=1278645801"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
