@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hexo+Github托管(Windows)的搭建简单示例</title>
+    <title>Hexo+Github托管(Windows)的简单示例</title>
     <url>/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/</url>
     <content><![CDATA[<hr>
 <span id="more"></span>
@@ -51,9 +51,11 @@
 <h5 id="配置Github-Pages实现自定义域名访问"><a href="#配置Github-Pages实现自定义域名访问" class="headerlink" title="配置Github Pages实现自定义域名访问"></a>配置Github Pages实现自定义域名访问</h5><p>前提条件 (以阿里云解析为例)</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.拥有一个自己的域名</span><br><span class="line">2.DNS解析服务</span><br></pre></td></tr></table></figure>
 
-<p>访问username.github.io repository的settings，下拉找到”Custom domain”，将其配置为自定义域名，比如domain.com或二级域名blog.domain.com</p>
+<h6 id="①-进入Pages网页手动修改"><a href="#①-进入Pages网页手动修改" class="headerlink" title="①.进入Pages网页手动修改"></a>①.进入Pages网页手动修改</h6><p>访问username.github.io repository的settings，下拉找到”Custom domain”，将其配置为自定义域名，比如domain.com或二级域名blog.domain.com</p>
 <img src="/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/Github-Pages配置.png" alt="Github-Pages设置.png" style="zoom: 50%;">
 
+<h6 id="②-部署时指定CNAME"><a href="#②-部署时指定CNAME" class="headerlink" title="②.部署时指定CNAME"></a>②.部署时指定CNAME</h6><p>在博客根目录下的source文件夹创建无扩展名的”CNAME”文件，在里面填入域名，部署到Github时就会自动更改GitHub Pages的自定义域名</p>
+<p>source/CNAME &lt;-<code>blog.domain.com</code></p>
 <p>在解析服务中添加CNAME解析</p>
 <table>
 <thead>
@@ -132,44 +134,6 @@
 <p>*#关闭acmedocker（关闭后所有文件将重置，无法更新证书）<br><code>docker kill acmedocker</code></p>
 <p>#带星号*的命令可写入.ps1文件并运行，让PowerShell进行一键搞定</p>
 <p>#默认60天更新证书，可强制更新–force<br><code>docker exec acmedocker acme.sh --renew --dns -d example.com -d *.example.com</code></p>
-]]></content>
-      <tags>
-        <tag>技术</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建私人图床 (Minio+PicUploader))</title>
-    <url>/2020/03/15/%E6%90%AD%E5%BB%BA%E7%A7%81%E4%BA%BA%E5%9B%BE%E5%BA%8A-Minio-PicUploader/</url>
-    <content><![CDATA[<hr>
-<span id="more"></span>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker： Docker for windows 2.2.0.3 (Engine: 19.03.5, Compose: 1.25.4)</span><br><span class="line">Nginx： Docker (nginx:latest)</span><br></pre></td></tr></table></figure>
-
-<h4 id="Minio"><a href="#Minio" class="headerlink" title="Minio"></a>Minio</h4><p><a href="https://github.com/minio/minio">官方Github</a></p>
-<h5 id="简单运行"><a href="#简单运行" class="headerlink" title="简单运行"></a>简单运行</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull minio&#x2F;minio</span><br><span class="line">docker run -p 9000:9000 minio&#x2F;minio server &#x2F;data</span><br></pre></td></tr></table></figure>
-
-<h5 id="Minio-compose-yml"><a href="#Minio-compose-yml" class="headerlink" title="Minio compose.yml"></a>Minio compose.yml</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  minio:</span><br><span class="line">    image: minio&#x2F;minio</span><br><span class="line">    container_name: minio</span><br><span class="line">    environment:</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - MINIO_ACCESS_KEY&#x3D;accesskey				# 管理用户名</span><br><span class="line">      - MINIO_SECRET_KEY&#x3D;secretkey				# 管理密码</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;minio&#x2F;data:&#x2F;data				#外置存储</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;minio&#x2F;config:&#x2F;root&#x2F;.minio		#外置配置</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;9000&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    command:</span><br><span class="line">      - server</span><br><span class="line">      - &#x2F;data</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
-
-<h5 id="使用SSL证书"><a href="#使用SSL证书" class="headerlink" title="使用SSL证书"></a>使用SSL证书</h5><p>在/root/.minio中放入证书和私钥文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;root&#x2F;.minio&#x2F;certs&#x2F;public.crt</span><br><span class="line">&#x2F;root&#x2F;.minio&#x2F;certs&#x2F;private.key</span><br></pre></td></tr></table></figure>
-
-<h5 id="使用MinIO"><a href="#使用MinIO" class="headerlink" title="使用MinIO"></a>使用MinIO</h5><ol>
-<li><p>访问 <a href="http://localhost:9000/">http://localhost:9000/</a> 进入MinIO管理界面</p>
-</li>
-<li><p>创建bucket，名称最小3个字符，不允许有大写字母、下划线、特殊字符 如@#等</p>
-</li>
-<li><p>给bucket内所有文件增加只读策略，实现永久外链访问 (关键步骤) </p>
-</li>
-</ol>
-<h4 id="PicUploader"><a href="#PicUploader" class="headerlink" title="PicUploader"></a>PicUploader</h4><p><a href="https://github.com/xiebruce/PicUploader">官方Github</a></p>
-<h5 id="PicUploader-compose-yml"><a href="#PicUploader-compose-yml" class="headerlink" title="PicUploader compose.yml"></a>PicUploader compose.yml</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  picuploader:</span><br><span class="line">    image: leonyff&#x2F;picuploader:latest</span><br><span class="line">    container_name: picuploader</span><br><span class="line">    environment:</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - USER&#x3D;user					# Web用户名</span><br><span class="line">      - PASSWD&#x3D;password				# Web用户密码</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;C&#x2F;Docker&#x2F;picuploader&#x2F;config.php:&#x2F;var&#x2F;www&#x2F;PicUploader&#x2F;config&#x2F;config.php		#外挂配置文件</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
-
-<p>可访问 <a href="http://localhost/">http://localhost:80</a> 进入WEB界面</p>
-<h5 id="配置config-php"><a href="#配置config-php" class="headerlink" title="配置config.php"></a>配置config.php</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	</span><br><span class="line">	&#x2F;&#x2F; 开源自建对象存储服务器Minio：https:&#x2F;&#x2F;github.com&#x2F;minio&#x2F;minio</span><br><span class="line">	&#39;minio&#39; &#x3D;&gt; [</span><br><span class="line">		&#39;name&#39; &#x3D;&gt; &#39;Minio&#39;,</span><br><span class="line">		&#39;AccessKeyId&#39; &#x3D;&gt; &#39;accesskey&#39;,</span><br><span class="line">		&#39;AccessKeySecret&#39; &#x3D;&gt; &#39;secretkey&#39;,</span><br><span class="line">		&#x2F;&#x2F;如果你的minio服务器未设置region，那就留空</span><br><span class="line">		&#39;region&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">		&#39;bucket&#39; &#x3D;&gt; &#39;images&#39;,</span><br><span class="line">		&#39;endpoint&#39; &#x3D;&gt; &#39;http(s):&#x2F;&#x2F;域名:端口&#39;,</span><br><span class="line">		&#x2F;&#x2F;自定义域名，如果为空，则默认使用endpoint作为域名</span><br><span class="line">		&#39;domain&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">		&#x2F;&#x2F;自定义目录格式：2019&#x2F;03&#x2F;31</span><br><span class="line">		&#39;directory&#39; &#x3D;&gt; &#39;&#x2F;&#39;,</span><br><span class="line">		&#x2F;&#x2F;使用代理，格式：http:&#x2F;&#x2F;127.0.0.1:1087</span><br><span class="line">		&#39;proxy&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">	],</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
-
-<h5 id="Nginx-HTTPS访问-以容器互访为例"><a href="#Nginx-HTTPS访问-以容器互访为例" class="headerlink" title="Nginx HTTPS访问 (以容器互访为例)"></a>Nginx HTTPS访问 (以容器互访为例)</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;</span><br><span class="line">    server_name minio.domain.com;      										# 监听请求域名</span><br><span class="line"></span><br><span class="line">    ssl_certificate       &#x2F;etc&#x2F;ssl&#x2F;cert.cer;								# 证书路径</span><br><span class="line">    ssl_certificate_key   &#x2F;etc&#x2F;ssl&#x2F;private.key;								# 私钥路径</span><br><span class="line">    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">	</span><br><span class="line">    client_max_body_size 10m;</span><br><span class="line">    fastcgi_buffers 64 4K;</span><br><span class="line">    </span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass https:&#x2F;&#x2F;minio:9000&#x2F;;								# 如果minio用了证书，则反代https</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_buffer_size 1M;</span><br><span class="line">        proxy_buffers 8 1M;</span><br><span class="line">        proxy_busy_buffers_size 1M;</span><br><span class="line">        proxy_temp_file_write_size 1M;</span><br><span class="line">        proxy_connect_timeout 300s;</span><br><span class="line">        proxy_send_timeout 300s;</span><br><span class="line">        proxy_read_timeout 300s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>PicUploader同理反代80端口，配置好后就能通过 <a href="https://minio.domain.com/">https://minio.domain.com</a> 就访问Web界面了</p>
 ]]></content>
       <tags>
         <tag>技术</tag>
@@ -318,20 +282,41 @@
       </tags>
   </entry>
   <entry>
-    <title>王国之心3 Remind 快速通行代码全成就简易攻略</title>
-    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E5%BF%AB%E9%80%9F%E9%80%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%85%A8%E6%88%90%E5%B0%B1%E7%AE%80%E6%98%93%E6%94%BB%E7%95%A5/</url>
+    <title>搭建私人图床 (Minio+PicUploader))</title>
+    <url>/2020/03/15/%E6%90%AD%E5%BB%BA%E7%A7%81%E4%BA%BA%E5%9B%BE%E5%BA%8A-Minio-PicUploader/</url>
     <content><![CDATA[<hr>
 <span id="more"></span>
 
-<p>首先！快速通行代码的成就PS4奖杯没有难度要求，推荐使用简单难度完成</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.空中挑战：在空中击倒13个敌人，途中不能落地（魔法、连结、合作技、游乐设施特技动作击倒的敌人无效）</span><br><span class="line"></span><br><span class="line">2.暴怒形态挑战：以暴怒形态一次打倒20个“阴影”和”新型阴影“</span><br><span class="line"></span><br><span class="line">3.连结挑战：以任一连结一次打倒77个敌人</span><br><span class="line"></span><br><span class="line">4.破冰挑战：在同一场战斗中冰冻30个敌人</span><br><span class="line"></span><br><span class="line">5.基伽巨兵挑战：以任一游乐设施特技动作一次达到5架基伽巨兵</span><br><span class="line"></span><br><span class="line">6.空中漫步挑战：不走地面，并在5次落地内从森林高塔抵达科洛那的城镇</span><br><span class="line"></span><br><span class="line">7.墨黑幽魂挑战：驾驶积木船打倒潜藏在云雾星河的攻击卫星“墨黑幽魂”并以A阶级通关</span><br><span class="line"></span><br><span class="line">8.保龄球挑战：以合作动作“尖叫全倒”一次打倒10个敌人</span><br><span class="line"></span><br><span class="line">9.只开启战斗代码“险中求生”通过2星的任一战斗传送门</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker： Docker for windows 2.2.0.3 (Engine: 19.03.5, Compose: 1.25.4)</span><br><span class="line">Nginx： Docker (nginx:latest)</span><br></pre></td></tr></table></figure>
 
-<p>1、2、3、4理论上可以在键刃墓地“千人斩”战斗中完成，需要注意的是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.只要脚不落地都算在内，可以找敌人多而且能反复触发爬墙的场景完成，另外只能靠索拉本体平A击杀敌人。我个人认为比较早能完成的场景在奥林帕斯世界，有一处底下崩塌全是火，两侧都是爬墙的场景，前期留意把两个猪队友的伤害技能都关闭，不然会抢人头</span><br><span class="line"></span><br><span class="line">2.暴怒形态需要残血才会触发指令，建议带上“情绪崩堤”（残血时100%触发）</span><br><span class="line"></span><br><span class="line">3.连结挑战开启“持久连结”，时间延长至少一分钟，比较轻松能完成的场景：索拉拯救7位守护者心进入奥林帕斯世界时，路上全是阴影和新型阴影，另外就是千人斩部分</span><br><span class="line"></span><br><span class="line">4.破冰挑战的“冰冻”指的是暴雪魔法打中敌人出现冰冻效果，一发暴雪就打死敌人不计算在内，这个成就我个人最早能完成的场景是怪兽工厂倒数的某一次大场地战斗中，需要积攒欢笑能量，此处只要不触发尖叫全倒的RC指令，敌人就会无限刷新，注意前期不要等级刷得太高，魔法力太高会直接秒怪而不计算成就</span><br><span class="line"></span><br><span class="line">5.个人推荐场景在玩具商店3楼的儿童乐园处，此处刷出的机甲兵玩具不止5架，但要记住伤害要足</span><br><span class="line"></span><br><span class="line">6.建议在到达键刃墓地完成千人斩后拿到滑翔再做，途中触发爬墙是不计算5次落地内的，人物一旦落地千万别动左摇杆（个人惨痛经历），比较麻烦的只有一点：途中有一处大场景需要反复高跳到达高台（剧情中需要乐佩用头发荡2次那里）</span><br><span class="line"></span><br><span class="line">7.这个刷过积木船隐藏boss A评价的都知道怎么打，快速通行代码模式可以开局就拿到最强积木船金闪闪，然后就是一直刷boss的浮游护盾，一个护盾一万点分数，刷够100万分就是A评价</span><br><span class="line"></span><br><span class="line">8.怪兽公司限定，在两次需要积攒欢笑能量触发尖叫全倒的战斗中都可以比较轻松地完成，主要别让猪队友输出太高，怪物尽量集中，10只要求其实不怎么高</span><br><span class="line"></span><br><span class="line">9.通关后才会解锁显示的成就，险中求胜敌我3倍伤害，我个人完成的战斗传送门是No.2 奥林帕斯-天界-天顶，里面只有2只小Boss怪，64攻67魔面板，3倍伤害下利用连结的超高比例减伤，可以轻松磨死</span><br></pre></td></tr></table></figure>
+<h4 id="Minio"><a href="#Minio" class="headerlink" title="Minio"></a>Minio</h4><p><a href="https://github.com/minio/minio">官方Github</a></p>
+<h5 id="简单运行"><a href="#简单运行" class="headerlink" title="简单运行"></a>简单运行</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull minio&#x2F;minio</span><br><span class="line">docker run -p 9000:9000 minio&#x2F;minio server &#x2F;data</span><br></pre></td></tr></table></figure>
 
+<h5 id="Minio-compose-yml"><a href="#Minio-compose-yml" class="headerlink" title="Minio compose.yml"></a>Minio compose.yml</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  minio:</span><br><span class="line">    image: minio&#x2F;minio</span><br><span class="line">    container_name: minio</span><br><span class="line">    environment:</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - MINIO_ACCESS_KEY&#x3D;accesskey				# 管理用户名</span><br><span class="line">      - MINIO_SECRET_KEY&#x3D;secretkey				# 管理密码</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;minio&#x2F;data:&#x2F;data				#外置存储</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;minio&#x2F;config:&#x2F;root&#x2F;.minio		#外置配置</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;9000&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    command:</span><br><span class="line">      - server</span><br><span class="line">      - &#x2F;data</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
+
+<h5 id="使用SSL证书"><a href="#使用SSL证书" class="headerlink" title="使用SSL证书"></a>使用SSL证书</h5><p>在/root/.minio中放入证书和私钥文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;root&#x2F;.minio&#x2F;certs&#x2F;public.crt</span><br><span class="line">&#x2F;root&#x2F;.minio&#x2F;certs&#x2F;private.key</span><br></pre></td></tr></table></figure>
+
+<h5 id="使用MinIO"><a href="#使用MinIO" class="headerlink" title="使用MinIO"></a>使用MinIO</h5><ol>
+<li><p>访问 <a href="http://localhost:9000/">http://localhost:9000/</a> 进入MinIO管理界面</p>
+</li>
+<li><p>创建bucket，名称最小3个字符，不允许有大写字母、下划线、特殊字符 如@#等</p>
+</li>
+<li><p>给bucket内所有文件增加只读策略，实现永久外链访问 (关键步骤) </p>
+</li>
+</ol>
+<h4 id="PicUploader"><a href="#PicUploader" class="headerlink" title="PicUploader"></a>PicUploader</h4><p><a href="https://github.com/xiebruce/PicUploader">官方Github</a></p>
+<h5 id="PicUploader-compose-yml"><a href="#PicUploader-compose-yml" class="headerlink" title="PicUploader compose.yml"></a>PicUploader compose.yml</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  picuploader:</span><br><span class="line">    image: leonyff&#x2F;picuploader:latest</span><br><span class="line">    container_name: picuploader</span><br><span class="line">    environment:</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - USER&#x3D;user					# Web用户名</span><br><span class="line">      - PASSWD&#x3D;password				# Web用户密码</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;C&#x2F;Docker&#x2F;picuploader&#x2F;config.php:&#x2F;var&#x2F;www&#x2F;PicUploader&#x2F;config&#x2F;config.php		#外挂配置文件</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
+
+<p>可访问 <a href="http://localhost/">http://localhost:80</a> 进入WEB界面</p>
+<h5 id="配置config-php"><a href="#配置config-php" class="headerlink" title="配置config.php"></a>配置config.php</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	</span><br><span class="line">	&#x2F;&#x2F; 开源自建对象存储服务器Minio：https:&#x2F;&#x2F;github.com&#x2F;minio&#x2F;minio</span><br><span class="line">	&#39;minio&#39; &#x3D;&gt; [</span><br><span class="line">		&#39;name&#39; &#x3D;&gt; &#39;Minio&#39;,</span><br><span class="line">		&#39;AccessKeyId&#39; &#x3D;&gt; &#39;accesskey&#39;,</span><br><span class="line">		&#39;AccessKeySecret&#39; &#x3D;&gt; &#39;secretkey&#39;,</span><br><span class="line">		&#x2F;&#x2F;如果你的minio服务器未设置region，那就留空</span><br><span class="line">		&#39;region&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">		&#39;bucket&#39; &#x3D;&gt; &#39;images&#39;,</span><br><span class="line">		&#39;endpoint&#39; &#x3D;&gt; &#39;http(s):&#x2F;&#x2F;域名:端口&#39;,</span><br><span class="line">		&#x2F;&#x2F;自定义域名，如果为空，则默认使用endpoint作为域名</span><br><span class="line">		&#39;domain&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">		&#x2F;&#x2F;自定义目录格式：2019&#x2F;03&#x2F;31</span><br><span class="line">		&#39;directory&#39; &#x3D;&gt; &#39;&#x2F;&#39;,</span><br><span class="line">		&#x2F;&#x2F;使用代理，格式：http:&#x2F;&#x2F;127.0.0.1:1087</span><br><span class="line">		&#39;proxy&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">	],</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<h5 id="Nginx-HTTPS访问-以容器互访为例"><a href="#Nginx-HTTPS访问-以容器互访为例" class="headerlink" title="Nginx HTTPS访问 (以容器互访为例)"></a>Nginx HTTPS访问 (以容器互访为例)</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;</span><br><span class="line">    server_name minio.domain.com;      										# 监听请求域名</span><br><span class="line"></span><br><span class="line">    ssl_certificate       &#x2F;etc&#x2F;ssl&#x2F;cert.cer;								# 证书路径</span><br><span class="line">    ssl_certificate_key   &#x2F;etc&#x2F;ssl&#x2F;private.key;								# 私钥路径</span><br><span class="line">    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">	</span><br><span class="line">    client_max_body_size 10m;</span><br><span class="line">    fastcgi_buffers 64 4K;</span><br><span class="line">    </span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass https:&#x2F;&#x2F;minio:9000&#x2F;;								# 如果minio用了证书，则反代https</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_buffer_size 1M;</span><br><span class="line">        proxy_buffers 8 1M;</span><br><span class="line">        proxy_busy_buffers_size 1M;</span><br><span class="line">        proxy_temp_file_write_size 1M;</span><br><span class="line">        proxy_connect_timeout 300s;</span><br><span class="line">        proxy_send_timeout 300s;</span><br><span class="line">        proxy_read_timeout 300s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>PicUploader同理反代80端口，配置好后就能通过 <a href="https://minio.domain.com/">https://minio.domain.com</a> 就访问Web界面了</p>
 ]]></content>
       <tags>
-        <tag>游戏</tag>
+        <tag>技术</tag>
       </tags>
   </entry>
   <entry>
@@ -364,6 +349,23 @@
 <hr>
 <p>最后我只能说：SE你tm就是狗13，37万分卡得这么极限，要么磨时间打主线拉分，要么死练技术打变态boss拉分，要么面对一个最变态的boss夜空</p>
 <p>DLC奖杯没有白金杯，老子不稀罕这逼死普通玩家的DLC奖杯！</p>
+]]></content>
+      <tags>
+        <tag>游戏</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>王国之心3 Remind 快速通行代码全成就简易攻略</title>
+    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E5%BF%AB%E9%80%9F%E9%80%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%85%A8%E6%88%90%E5%B0%B1%E7%AE%80%E6%98%93%E6%94%BB%E7%95%A5/</url>
+    <content><![CDATA[<hr>
+<span id="more"></span>
+
+<p>首先！快速通行代码的成就PS4奖杯没有难度要求，推荐使用简单难度完成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.空中挑战：在空中击倒13个敌人，途中不能落地（魔法、连结、合作技、游乐设施特技动作击倒的敌人无效）</span><br><span class="line"></span><br><span class="line">2.暴怒形态挑战：以暴怒形态一次打倒20个“阴影”和”新型阴影“</span><br><span class="line"></span><br><span class="line">3.连结挑战：以任一连结一次打倒77个敌人</span><br><span class="line"></span><br><span class="line">4.破冰挑战：在同一场战斗中冰冻30个敌人</span><br><span class="line"></span><br><span class="line">5.基伽巨兵挑战：以任一游乐设施特技动作一次达到5架基伽巨兵</span><br><span class="line"></span><br><span class="line">6.空中漫步挑战：不走地面，并在5次落地内从森林高塔抵达科洛那的城镇</span><br><span class="line"></span><br><span class="line">7.墨黑幽魂挑战：驾驶积木船打倒潜藏在云雾星河的攻击卫星“墨黑幽魂”并以A阶级通关</span><br><span class="line"></span><br><span class="line">8.保龄球挑战：以合作动作“尖叫全倒”一次打倒10个敌人</span><br><span class="line"></span><br><span class="line">9.只开启战斗代码“险中求生”通过2星的任一战斗传送门</span><br></pre></td></tr></table></figure>
+
+<p>1、2、3、4理论上可以在键刃墓地“千人斩”战斗中完成，需要注意的是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.只要脚不落地都算在内，可以找敌人多而且能反复触发爬墙的场景完成，另外只能靠索拉本体平A击杀敌人。我个人认为比较早能完成的场景在奥林帕斯世界，有一处底下崩塌全是火，两侧都是爬墙的场景，前期留意把两个猪队友的伤害技能都关闭，不然会抢人头</span><br><span class="line"></span><br><span class="line">2.暴怒形态需要残血才会触发指令，建议带上“情绪崩堤”（残血时100%触发）</span><br><span class="line"></span><br><span class="line">3.连结挑战开启“持久连结”，时间延长至少一分钟，比较轻松能完成的场景：索拉拯救7位守护者心进入奥林帕斯世界时，路上全是阴影和新型阴影，另外就是千人斩部分</span><br><span class="line"></span><br><span class="line">4.破冰挑战的“冰冻”指的是暴雪魔法打中敌人出现冰冻效果，一发暴雪就打死敌人不计算在内，这个成就我个人最早能完成的场景是怪兽工厂倒数的某一次大场地战斗中，需要积攒欢笑能量，此处只要不触发尖叫全倒的RC指令，敌人就会无限刷新，注意前期不要等级刷得太高，魔法力太高会直接秒怪而不计算成就</span><br><span class="line"></span><br><span class="line">5.个人推荐场景在玩具商店3楼的儿童乐园处，此处刷出的机甲兵玩具不止5架，但要记住伤害要足</span><br><span class="line"></span><br><span class="line">6.建议在到达键刃墓地完成千人斩后拿到滑翔再做，途中触发爬墙是不计算5次落地内的，人物一旦落地千万别动左摇杆（个人惨痛经历），比较麻烦的只有一点：途中有一处大场景需要反复高跳到达高台（剧情中需要乐佩用头发荡2次那里）</span><br><span class="line"></span><br><span class="line">7.这个刷过积木船隐藏boss A评价的都知道怎么打，快速通行代码模式可以开局就拿到最强积木船金闪闪，然后就是一直刷boss的浮游护盾，一个护盾一万点分数，刷够100万分就是A评价</span><br><span class="line"></span><br><span class="line">8.怪兽公司限定，在两次需要积攒欢笑能量触发尖叫全倒的战斗中都可以比较轻松地完成，主要别让猪队友输出太高，怪物尽量集中，10只要求其实不怎么高</span><br><span class="line"></span><br><span class="line">9.通关后才会解锁显示的成就，险中求胜敌我3倍伤害，我个人完成的战斗传送门是No.2 奥林帕斯-天界-天顶，里面只有2只小Boss怪，64攻67魔面板，3倍伤害下利用连结的超高比例减伤，可以轻松磨死</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <tags>
         <tag>游戏</tag>
@@ -418,6 +420,145 @@
       </tags>
   </entry>
   <entry>
+    <title>配置免费图床Chevereto</title>
+    <url>/2020/11/11/%E8%87%AA%E5%BB%BA%E5%85%8D%E8%B4%B9%E5%9B%BE%E5%BA%8AChevereto/</url>
+    <content><![CDATA[<hr>
+<span id="more"></span>
+
+<p>搭建环境</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker： Docker for windows 2.4.0.0 (Engine: 19.03.13, Compose: 1.27.4)</span><br><span class="line">Chevereto： Lastest（内含Nginx和PHP，linsxserver&#x2F;chevereto）</span><br><span class="line">Mariadb： Latest（mariadb:latest）</span><br></pre></td></tr></table></figure>
+
+<h5 id="Chevereto"><a href="#Chevereto" class="headerlink" title="Chevereto"></a>Chevereto</h5><p><a href="https://github.com/Chevereto/Chevereto-Free">官方Github</a></p>
+<h6 id="Chevereto-compose-yml"><a href="#Chevereto-compose-yml" class="headerlink" title="Chevereto compose.yml"></a>Chevereto compose.yml</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  minio:</span><br><span class="line">    image: linuxserver&#x2F;chevereto</span><br><span class="line">    container_name: chevereto</span><br><span class="line">    environment:</span><br><span class="line">      - PUID&#x3D;1000</span><br><span class="line">      - PGID&#x3D;1000</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;chevereto&#x2F;config:&#x2F;config		# 挂载配置文件夹和日志文件夹</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;chevereto&#x2F;data:&#x2F;data			# 挂载数据文件夹</span><br><span class="line">    expose:									# 搭配跨容器反代用，容器自带Nginx，可改为端口转发的ports</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">      - &#39;443&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:									# 该networks段是为了跨nginx容器反代使用，可不要</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
+
+<p>docker-compose up之后可访问<a href="http://localhost/%E8%AE%BF%E9%97%AE%E7%BD%91%E9%A1%B5%E5%88%9D%E5%A7%8B%E5%8C%96Chevereto">http://localhost/访问网页初始化Chevereto</a></p>
+<h6 id="使用SSL证书"><a href="#使用SSL证书" class="headerlink" title="使用SSL证书"></a>使用SSL证书</h6><p>镜像默认自签证书，如果需要使用自己的证书，就在/config/keys中放入证书和私钥文件并重启容器</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;config&#x2F;keys&#x2F;cert.crt</span><br><span class="line">&#x2F;config&#x2F;keys&#x2F;cert.key</span><br></pre></td></tr></table></figure>
+
+<h6 id="Chevereto初始化"><a href="#Chevereto初始化" class="headerlink" title="Chevereto初始化"></a>Chevereto初始化</h6><p>访问网页端，根据页面流程设置数据库地址、名称、账号、密码，设置Chevereto管理员账号、密码</p>
+<h6 id="配置Nginx实现非标准端口访问"><a href="#配置Nginx实现非标准端口访问" class="headerlink" title="配置Nginx实现非标准端口访问"></a>配置Nginx实现非标准端口访问</h6><p>网络拓补：运营商→Modem→主路由（拨号上网+10000端口转发到宿主机同端口）→Docker宿主机→Nginx容器（10000端口转发443）→Chevereto容器</p>
+<p>因为博主个人喜好使用单独的Nginx容器统一反代所有容器，这样就可以通过”服务名.xxx.com:10000”访问不同容器内的服务</p>
+<p>通过”chevereto.xxx.com:10000”可正常访问使用Chevereto</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;													# nginx容器自身监听443，外界通过容器的10000端口转发443访问</span><br><span class="line">    server_name chevereto.xxx.com;</span><br><span class="line">    error_page 497 https:&#x2F;&#x2F;$host:10000$request_uri;</span><br><span class="line"></span><br><span class="line">    ssl_certificate       &#x2F;config&#x2F;keys&#x2F;cert.cer;</span><br><span class="line">    ssl_certificate_key   &#x2F;config&#x2F;keys&#x2F;cert.key;</span><br><span class="line">    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">	</span><br><span class="line">    client_max_body_size 10m;</span><br><span class="line">    fastcgi_buffers 64 4K;</span><br><span class="line">    </span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;chevereto&#x2F;;</span><br><span class="line">        proxy_set_header Host $http_host;									# http_host关键</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="配置Chevereto"><a href="#配置Chevereto" class="headerlink" title="配置Chevereto"></a>配置Chevereto</h6><p>修改/config/php/php-local.ini改动图片最大上传大小</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">date.timezone &#x3D; Asia&#x2F;Shanghai </span><br><span class="line">upload_max_filesize &#x3D; 200M</span><br><span class="line">post_max_size &#x3D; 200M</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一篇家庭NAS主机折腾随记</title>
+    <url>/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/</url>
+    <content><![CDATA[<hr>
+<span id="more"></span>
+
+<p>时隔5个月多，2020年11月换了一个城市打工，每天忙于新工作环境的适应和工作内容的掌握熟悉，再加上我个人没有写日记的习惯，导致博客的基本没有什么有效内容产出，就连这一篇随记也是空闲了下来才想着摸着鱼，一边写一边回忆这一周以来折腾家里原来跑着Windows Server 2019的NAS主机。</p>
+<h4 id="正篇"><a href="#正篇" class="headerlink" title="正篇"></a>正篇</h4><p>Unraid系统除了拥有一般NAS系统的功能，还能运行Docker、虚拟机，直通硬件也十分方便，并且社区扩展活跃丰富，能添加各式各样嵌入到系统界面的插件，非常适合做全功能一体机的底层系统。</p>
+<p>目前家里的主机的所有Docker容器和虚拟机都正常在Unraid内运行，已经稳定运行一个月。</p>
+<h5 id="系统安装"><a href="#系统安装" class="headerlink" title="系统安装"></a>系统安装</h5><p>网上有很多教程，甚至还有很多盗版教程，系统安装这一部分没有什么需要填坑的地方，需要注意的是如果想入正版Key，一般只能通过正常安装试用Trial key，然后在系统Tools - Registration里点击购买，官网没有相关的购买链接。</p>
+<h5 id="NAS"><a href="#NAS" class="headerlink" title="NAS"></a>NAS</h5><p>Unraid的NAS部分十分简洁，整个系统按照授权版本限制可加入序列的存储硬盘数量，包括校验盘Parity Drive和缓存盘Cache Drive，但不包括用于启动的U盘。</p>
+<h6 id="Shares-共享文件夹"><a href="#Shares-共享文件夹" class="headerlink" title="Shares/共享文件夹"></a>Shares/共享文件夹</h6><img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares.png" alt="Shares" style="zoom:50%;">
+
+<p>在系统安装完毕后，在MAIN页面可以看到所有被系统识别出来的存储设备，包括启动引导用的USB设备。硬盘序列Array加入硬盘后，需要在下方执行Format格式化才能供Unraid使用。在Array启动之后，Shares页面默认创建几个文件夹，对应的是不同分类文件的存储，并且默认启用SMB方式共享。</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares说明.png" alt="Shares说明" style="zoom:33%;">
+
+<p>appdata：主要存放Docker容器的文件，包括从容器内挂载volume出来的数据</p>
+<p>domains：存放一些虚拟机会用到的镜像、虚拟磁盘文件，比如x86软路由的虚拟磁盘img、黑群晖的启动引导文件</p>
+<p>isos：系统镜像、安装引导文件等等都存放在这里</p>
+<p>system：Docker功能虚拟磁盘的默认存储路径，虚拟机主要虚拟磁盘的存放地方</p>
+<p><img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares%E6%96%87%E4%BB%B6%E5%A4%B9%E8%AE%BE%E7%BD%AE.png" alt="image-20210420202928417"></p>
+<p>点击文件夹名字后会进入该文件夹具体的设置页面，需要注意的地方：</p>
+<p>Allocation method：</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹Allocation Method.png" alt="Shares文件夹Allocation Method" style="zoom:50%;">
+
+<p>①High-water：以1T+2T+3T举例，当新文件写入的时候，系统会检测一次所有在array里的硬盘剩余容量，以最大容量硬盘的50%容量为基准 (3T÷2=1.5T)，随机写入到剩余容量&gt;1.5T的硬盘内（也就是2T和3T的硬盘），等到两个硬盘剩余容量都只剩1.5T，则进行第二次检测，基准变为0.75T，以此类推，系统会优先把文件写入剩余容量最大的硬盘内。<br>②Fill-up：系统以array中硬盘的顺序依次写入新文件，一般要搭配最小剩余容量使用，不然会引发因空间不足导致的Docker和虚拟机报错运行的问题<br>③Most-free：系统选取剩余容量最大的硬盘写入，需要注意的是每写入一个文件都会检测一遍各个硬盘的剩余容量，大量小文件写入时可能会大幅度影响array的I/O性能</p>
+<p>Minimum free space：该文件夹的最小剩余容量</p>
+<p>Split Level：分散目录的层级，默认为自动分散。简单来说就是根据设定的层级锁定文件夹分散到哪个硬盘里，Level 1是在Shares页面创建的文件夹Media，设置Top Level 1意味着Media文件夹可以分散存储到各个硬盘内但后续所有层级的文件夹则固定存储在对应的硬盘内；Top Level 2意味着Media/xxx这两层文件夹都会分散存储到各个硬盘内但后续第三层Media/xxx/xxx以后的所有层级文件夹都被固定存储在相应的硬盘内</p>
+<p>![Shares文件夹Include disks](记一篇家庭NAS主机折腾随记/Shares文件夹Include disks.png)</p>
+<p>Included disks：该文件夹存储包含的物理硬盘，默认为ALL，即新文件写入会随机存储到其中一个硬盘内</p>
+<p>Excluded disks：该文件夹存储排除的物理硬盘，默认为None，即不排除新文件写入某一个或几个硬盘内</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Use Cache.png" alt="image-20210420203153112" style="zoom:50%;">
+
+<p>Use Cache：系统默认有一个每天03:40启动的程序Mover，用来针对这个设置的<br>①No：不使用缓存盘，即新文件写入到该文件夹时直接写入Array的硬盘内</p>
+<p>②Yes：使用缓存盘，即新文件写入到该文件夹时直接写入到缓存盘内，但Mover运行会将文件从缓存盘中转移到Array中</p>
+<p>③Only：只使用缓存盘，即新文件一直留存在缓存盘内，即使Mover运行也不会转移数据</p>
+<p>④Prefer：该文件夹倾向于使用缓存盘，直到缓存盘剩余容量低于该文件夹设置的最小剩余容量，比如缓存盘120G容量，设置60G最小剩余容量，那么当缓存盘剩余60G的时候，企图写入该文件夹的新文件就会转为直接写入Array中，一般只有存放临时或不重要的文件夹才会设置为这个策略。但个人不推荐使用这种方式，容易导致让启用缓存盘共享文件夹的相关软件因空间不足而报错</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Export.png" style="zoom:50%;">
+
+<p>Export：No、Yes、Yes（hidden）对应不共享、共享、共享但隐藏显示</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Security.png" style="zoom:50%;">
+
+<p>Security：<br>①Public：所有人都可以读写</p>
+<p>②Secure：访客只能读取不能写入，可以在下方单独设置每个用户的读写权限</p>
+<p>③Private：访客不能读写，可以在下方单独设置每个用户的读写权限</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置SMB User Access.png" style="zoom:50%;">
+
+<h5 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h5><img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Docker.png" style="zoom:50%;">
+
+<p>First of all，Unraid的Docker是可以基本还原大部分容器运行状态的，最起码我个人使用的服务中都能通过详细配置正常使用</p>
+<p>首先当然是给Docker更换源加速下载部署，通过网页界面webui右上角的Terminal或者直接SSH登录进Unraid，新建或修改/etc/docker/daemon.json添加镜像源地址</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir -p &#x2F;etc&#x2F;docker </span><br><span class="line">tee &#x2F;etc&#x2F;docker&#x2F;daemon.json &lt;&lt;-&#39;EOF&#39; </span><br><span class="line">&#123; </span><br><span class="line">  &quot;registry-mirrors&quot;: [&quot;https:&#x2F;&#x2F;docker.mirrors.ustc.edu.cn&quot;] </span><br><span class="line">&#125; </span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Unraid-Docker-Add Container.png" style="zoom: 33%;">
+
+<p>在社区应用内有大量的docker模板提供下载，需要事先下载安装社区应用插件，即Community Applications，整个应用市场都托管在Github上，需要想点办法出国，不然会访问困难</p>
+<p>Template：模板，在社区应用APPS页面可以直接下载并加载到该页面并配置好所有东西，手动添加容器，在APPLY运行后系统也会默认将手工配置保存为用户模板，方便下次直接调用修改</p>
+<p>Repository：镜像仓库路径可以直接使用docker hub的注册镜像库路径，比如docker pull nginx拉取官方nginx镜像，则在这一行直接填入nginx就可以执行同样的命令</p>
+<p>Network Type：网络类型，Docker在启动后默认创建3个驱动分别为bridge、host、null的网络连接，容器默认使用Bridge桥接Unraid的bond0接口</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Docker容器配置.png" alt="Docker容器配置" style="zoom:50%;">
+
+<p>最后一项是核心，可以添加Path、Port、Variable、Label、Device参数，分别对应docker run中的-v、-p、-e、–label、–device，这5个选项就可以基本还原容器运行环境</p>
+<p>踩过的坑：</p>
+<ol>
+<li>每一次更改APPLY都是docker stop、docker rm、docker run，在运行比较大的容器时，要注意不能关闭页面，最好通过Terminal手工执行操作，不然通过网页操作不小心误关页面可能会导致容器启动异常</li>
+<li>某些游戏服务端的Docker镜像在启动时会无法识别Unraid自身的文件映射路径，比如我运行的求生之路2服务端，如果将服务端所在的路径/serverdata/serverfiles挂载到/mnt/user/appdata/l4d2server，如果实际文件被分散写入到disk1和disk2，那么在第二次重启运行的时候，容器就无法识别到所有在/mnt/user/appdata/l4d2server的文件。解决方法是指定挂载到物理硬盘路径内，比如/mnt/disk2/l4d2server</li>
+<li>默认的bridge网络可能不能实现容器间互通，需要创建自定义的网络才可以</li>
+<li>默认不支持Docker compose，目前官方也没放出消息要集成docker compose功能，涉及到多容器间协作的服务需要手工一个一个添加配置运行</li>
+<li>DOCKER页面的容器可以长按拖动调整顺序，这个顺序也是启用autostart的容器启动顺序</li>
+<li>要十分！十分！十分！十分！注意容器运行用户是哪一个，默认运行nobody:users，根据容器umask设置不同，有可能从容器内部挂载出去的文件夹通过smb访问没有权限修改写入甚至读取，如果不熟悉chown和chmod的可以直接在tools - new permissions里选择容器对应的挂载路径把权限全部重置一遍</li>
+</ol>
+<h5 id="VM虚拟机"><a href="#VM虚拟机" class="headerlink" title="VM虚拟机"></a>VM虚拟机</h5><img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/VMS.png" alt="image-20210420202426004" style="zoom:50%;">
+
+<p>这一块涉及不深，我只有基本的虚拟软路由翻墙和黑群晖同步照片2个虚拟机的需求，手里多了一台Intel Nuc 8放客厅作为父母的Windows娱乐影视机，所以也就没必要再折腾显卡直通，以后有机会升级到6.9还会尝试的（因为6.9对直通硬件进行了一系列优化和简便化操作）</p>
+<p>踩过的坑</p>
+<ol>
+<li>Unraid界面提供的配置选项还不够实用，虚拟网卡默认驱动都是virtio，想要上千兆或万兆网的朋友要手动切换高级视图编辑xml更改为e1000才行</li>
+<li>为了稳定兼容运行，引导方式最好选用SeaBIOS（即Legacy模式）</li>
+<li>虚拟机是可以直通硬盘的，前提是硬盘未加入Array，通过/dev/disks/by-id/硬盘ID挂载，不会影响原来就在Array里的硬盘数据，相当于同时把硬盘物理连接到unraid和虚拟机</li>
+</ol>
+<h5 id="APPS插件篇"><a href="#APPS插件篇" class="headerlink" title="APPS插件篇"></a>APPS插件篇</h5><p>这一块实用插件太多了，我只列举我自己用到的</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/APPS.png" style="zoom:50%;">
+
+<p>Community Applications：最核心的插件，社区应用其本身，没了它也就没有其他的事了，安装后直接在主界面显示APPS标签页</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Unassigned Devices.png" style="zoom:50%;">
+
+<p>Unassigned Devices：硬盘挂载的核心，可以挂载NTFS文件系统的硬盘，安装后默认选项在Main - Unassigned Devices，找到对应的硬盘选择Mount，点击硬盘ID左边的+号展开，对应分区点进去打开Share并等待一会，就能在Unraid的SMB共享里看到对应文件夹</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/SETTINGS插件.png" style="zoom:50%;">
+
+<p>User Scripts：比较关键的APP，相当于在unraid主机上的crontab，安装后默认选项在SETTINGS - User ultilities - User Scripts</p>
+<p>Fix Common Problems：检测Unraid运行的常见问题，主要是能看到登录尝试次数，查看是否有人爆破服务器，SETTINGS - User ultilities - Fix Common Problems</p>
+<p>Dynamix Wireguard：基于WireGuard的VPN服务端，安装后可以配置私人VPN，配合tunsafe之类的客户端可以接入Unraid所在的内网访问资源，十分方便，SETTINGS - Network services - VPN Manager</p>
+<p>Dynamix Cache Directories：缓存目录访问记录到内存里，注意不是缓存读取的文件到内存里，这个插件仅加速文件目录路径的访问，安装后选项默认在SETTINGS - User ultilities - Folder Caching</p>
+<p>Dynamix SSD TRIM：使用缓存盘必备的插件，能定时为SSD执行TRIM，安装后选项默认在SETTINGS - Scheduler</p>
+<h4 id="前篇"><a href="#前篇" class="headerlink" title="前篇"></a>前篇</h4><h5 id="一切的开端"><a href="#一切的开端" class="headerlink" title="一切的开端"></a>一切的开端</h5><p>2019年10月，我和家人收藏影音资源和存档的照片越来越多，家里人对数据存储已经产生了比较迫切的需求，恰逢工作交接期，周末比较空闲，就想着要买一台NAS主机。起初打算考虑品牌机，比如群晖Synology、威联通QNAP，这几家品牌机基本都属于明面上卖产品，实际上卖系统软件服务的厂商，所以主机硬件性能普遍弱，而我们又想着既然都要花钱买NAS，干脆自己组一台AIO主机，于是就着手购买相关硬件。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">主板：英业达B400G3_10G（带6个+4个SATA3口，2个SATA控制器，2个PCI-E x16槽位，自带超低规格的显示核心，4物理网口的4张板载千兆网卡）</span><br><span class="line">CPU：Intel E3 1230 v3</span><br><span class="line">内存：二手服务器拆机ECC内存8GB x4</span><br><span class="line">显卡：GTX750Ti （不需要额外供电）</span><br></pre></td></tr></table></figure>
+
+<h5 id="底层系统的选择"><a href="#底层系统的选择" class="headerlink" title="底层系统的选择"></a>底层系统的选择</h5><p>因为家里人需要Windows系统，所以AIO主机在底层系统可供的选择很少，常见的是ESXi和PVE，但都有不可回避的问题存在。</p>
+<p>ESXi：商业系统成熟稳定，硬件直通操作方便，但是不知是什么原因，主机配的Nvidia GTX750亮机卡始终不能直通到Win7虚拟机内使用，这也就没办法利用显卡流畅播放各种视频</p>
+<p>PVE：基于Debian的Linux系统，可视化操作太少，基本依赖命令，一旦需要调试，家里人根本不会操作</p>
+<p>最后选择了可以驱动N卡又能组建硬盘存储池的Windows Server，毕竟硬盘都是从现成的电脑主机上拆下来，3T+2T如果分开存储，在文件管理和容量上都会很不方便</p>
+<h5 id="Windows-Server实现All-in-One的局限"><a href="#Windows-Server实现All-in-One的局限" class="headerlink" title="Windows Server实现All in One的局限"></a>Windows Server实现All in One的局限</h5><p>在满足各种需求的过程中，我逐渐感受到Windows系统在自建功能服务的局限性，林林总总的服务端都提供不了持续稳定的windows版更新支持，而且Windows的Docker在使用上经常会出现我无法调试的文件系统错误，主要体现在容器运行时内外部文件读写执行上。</p>
+<p>Docker for windows切换为Linux内核后，通过创建一个基于Linux系统的Hyper-V虚拟机实现Docker服务运行。Docker需要访问Windows宿主机文件系统时提示需要开启共享盘，所以个人猜测Docker是基于smb方式与宿主机实现文件系统互通的，于是就出现了一系列解决不了的问题。</p>
+<p>Windows的Mysql被容器使用的时候会出现莫名其妙的连接错误，包括网络连接超时失败、文件读写权限错误等等，最后是改成使用Mariadb容器将数据库环境运行在Docker内部才正常运作使用，同样的情况也出现在Windows的Nginx上</p>
+<p>Windows还有一个非常影响体验的问题，那就是十分让人迷惑的本地文件系统权限以及网络共享SMB权限机制，可能给Server启用AD域管理会简便明了一点，可是我没有仔细研究，因为马上就要回到正篇考虑更换底层操作系统了。</p>
+]]></content>
+      <tags>
+        <tag>技术</tag>
+        <tag>随记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>还原Hexo Next主题配置</title>
     <url>/2021/04/18/%E8%BF%98%E5%8E%9FHexo-Next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<hr>
@@ -438,34 +579,6 @@
 ]]></content>
       <tags>
         <tag>备忘</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>配置免费图床Chevereto</title>
-    <url>/2020/11/11/%E9%85%8D%E7%BD%AE%E5%85%8D%E8%B4%B9%E5%9B%BE%E5%BA%8AChevereto/</url>
-    <content><![CDATA[<hr>
-<span id="more"></span>
-
-<p>搭建环境</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker： Docker for windows 2.4.0.0 (Engine: 19.03.13, Compose: 1.27.4)</span><br><span class="line">Chevereto： Lastest（内含Nginx和PHP，linsxserver&#x2F;chevereto）</span><br><span class="line">Mariadb： Latest（mariadb:latest）</span><br></pre></td></tr></table></figure>
-
-<h5 id="Chevereto"><a href="#Chevereto" class="headerlink" title="Chevereto"></a>Chevereto</h5><p><a href="https://github.com/Chevereto/Chevereto-Free">官方Github</a></p>
-<h6 id="Chevereto-compose-yml"><a href="#Chevereto-compose-yml" class="headerlink" title="Chevereto compose.yml"></a>Chevereto compose.yml</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  minio:</span><br><span class="line">    image: linuxserver&#x2F;chevereto</span><br><span class="line">    container_name: chevereto</span><br><span class="line">    environment:</span><br><span class="line">      - PUID&#x3D;1000</span><br><span class="line">      - PGID&#x3D;1000</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;chevereto&#x2F;config:&#x2F;config		# 挂载配置文件夹和日志文件夹</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;chevereto&#x2F;data:&#x2F;data			# 挂载数据文件夹</span><br><span class="line">    expose:									# 搭配跨容器反代用，容器自带Nginx，可改为端口转发的ports</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">      - &#39;443&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:									# 该networks段是为了跨nginx容器反代使用，可不要</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
-
-<p>docker-compose up之后可访问<a href="http://localhost/%E8%AE%BF%E9%97%AE%E7%BD%91%E9%A1%B5%E5%88%9D%E5%A7%8B%E5%8C%96Chevereto">http://localhost/访问网页初始化Chevereto</a></p>
-<h6 id="使用SSL证书"><a href="#使用SSL证书" class="headerlink" title="使用SSL证书"></a>使用SSL证书</h6><p>镜像默认自签证书，如果需要使用自己的证书，就在/config/keys中放入证书和私钥文件并重启容器</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;config&#x2F;keys&#x2F;cert.crt</span><br><span class="line">&#x2F;config&#x2F;keys&#x2F;cert.key</span><br></pre></td></tr></table></figure>
-
-<h6 id="Chevereto初始化"><a href="#Chevereto初始化" class="headerlink" title="Chevereto初始化"></a>Chevereto初始化</h6><p>访问网页端，根据页面流程设置数据库地址、名称、账号、密码，设置Chevereto管理员账号、密码</p>
-<h6 id="配置Nginx实现非标准端口访问"><a href="#配置Nginx实现非标准端口访问" class="headerlink" title="配置Nginx实现非标准端口访问"></a>配置Nginx实现非标准端口访问</h6><p>网络拓补：运营商→Modem→主路由（拨号上网+10000端口转发到宿主机同端口）→Docker宿主机→Nginx容器（10000端口转发443）→Chevereto容器</p>
-<p>因为博主情况所限，需要单独的Nginx容器统一处理所有容器的访问请求，方便管理，这样就可以通过”服务名.xxx.com:10000”访问不同容器内的服务</p>
-<p>通过”chevereto.xxx.com:10000”可正常访问使用Chevereto</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;													# nginx容器自身监听443，外界通过容器的10000端口转发443访问</span><br><span class="line">    server_name chevereto.xxx.com;</span><br><span class="line">    error_page 497 https:&#x2F;&#x2F;$host:10000$request_uri;</span><br><span class="line"></span><br><span class="line">    ssl_certificate       &#x2F;config&#x2F;keys&#x2F;cert.cer;</span><br><span class="line">    ssl_certificate_key   &#x2F;config&#x2F;keys&#x2F;cert.key;</span><br><span class="line">    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">	</span><br><span class="line">    client_max_body_size 10m;</span><br><span class="line">    fastcgi_buffers 64 4K;</span><br><span class="line">    </span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;chevereto&#x2F;;</span><br><span class="line">        proxy_set_header Host $http_host;									# http_host关键</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_buffer_size 1M;</span><br><span class="line">        proxy_buffers 8 1M;</span><br><span class="line">        proxy_busy_buffers_size 1M;</span><br><span class="line">        proxy_temp_file_write_size 1M;</span><br><span class="line">        proxy_connect_timeout 300s;</span><br><span class="line">        proxy_send_timeout 300s;</span><br><span class="line">        proxy_read_timeout 300s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h6 id="配置Chevereto"><a href="#配置Chevereto" class="headerlink" title="配置Chevereto"></a>配置Chevereto</h6><p>修改/config/php/php-local.ini改动图片最大上传大小</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">date.timezone &#x3D; Asia&#x2F;Shanghai </span><br><span class="line">upload_max_filesize &#x3D; 200M</span><br><span class="line">post_max_size &#x3D; 200M</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>技术</tag>
       </tags>
   </entry>
   <entry>

@@ -25,13 +25,13 @@
   </script>
 
   <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo+Github托管(Windows)的搭建简单示例">
+<meta property="og:title" content="Hexo+Github托管(Windows)的简单示例">
 <meta property="og:url" content="https://blog.zakikun.vip/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/index.html">
 <meta property="og:site_name" content="Zakikun">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog.zakikun.vip/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/Github-Pages配置.png">
 <meta property="article:published_time" content="2020-02-18T07:18:24.000Z">
-<meta property="article:modified_time" content="2021-04-20T07:47:38.969Z">
+<meta property="article:modified_time" content="2021-04-20T08:16:41.687Z">
 <meta property="article:author" content="Zakikun">
 <meta property="article:tag" content="技术">
 <meta name="twitter:card" content="summary">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>Hexo+Github托管(Windows)的搭建简单示例 | Zakikun</title>
+  <title>Hexo+Github托管(Windows)的简单示例 | Zakikun</title>
   
     <script>
       function sendPageView() {
@@ -150,7 +150,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">10</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a>
 
   </li>
         <li class="menu-item menu-item-sitemap">
@@ -224,7 +224,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hexo+Github托管(Windows)的搭建简单示例
+          Hexo+Github托管(Windows)的简单示例
         </h1>
 
         <div class="post-meta">
@@ -241,7 +241,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 15:47:38" itemprop="dateModified" datetime="2021-04-20T15:47:38+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 16:16:41" itemprop="dateModified" datetime="2021-04-20T16:16:41+08:00">2021-04-20</time>
               </span>
 
           
@@ -310,9 +310,11 @@
 <h5 id="配置Github-Pages实现自定义域名访问"><a href="#配置Github-Pages实现自定义域名访问" class="headerlink" title="配置Github Pages实现自定义域名访问"></a>配置Github Pages实现自定义域名访问</h5><p>前提条件 (以阿里云解析为例)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.拥有一个自己的域名</span><br><span class="line">2.DNS解析服务</span><br></pre></td></tr></table></figure>
 
-<p>访问username.github.io repository的settings，下拉找到”Custom domain”，将其配置为自定义域名，比如domain.com或二级域名blog.domain.com</p>
+<h6 id="①-进入Pages网页手动修改"><a href="#①-进入Pages网页手动修改" class="headerlink" title="①.进入Pages网页手动修改"></a>①.进入Pages网页手动修改</h6><p>访问username.github.io repository的settings，下拉找到”Custom domain”，将其配置为自定义域名，比如domain.com或二级域名blog.domain.com</p>
 <img src="/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/Github-Pages配置.png" alt="Github-Pages设置.png" style="zoom: 50%;">
 
+<h6 id="②-部署时指定CNAME"><a href="#②-部署时指定CNAME" class="headerlink" title="②.部署时指定CNAME"></a>②.部署时指定CNAME</h6><p>在博客根目录下的source文件夹创建无扩展名的”CNAME”文件，在里面填入域名，部署到Github时就会自动更改GitHub Pages的自定义域名</p>
+<p>source/CNAME &lt;-<code>blog.domain.com</code></p>
 <p>在解析服务中添加CNAME解析</p>
 <table>
 <thead>
@@ -369,7 +371,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://blog.zakikun.vip/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/" title="Hexo+Github托管(Windows)的搭建简单示例">https://blog.zakikun.vip/2020/02/18/Hexo-Github托管-Windows-的搭建简单示例/</a>
+    <a href="https://blog.zakikun.vip/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/" title="Hexo+Github托管(Windows)的简单示例">https://blog.zakikun.vip/2020/02/18/Hexo-Github托管-Windows-的搭建简单示例/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -452,7 +454,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">准备环境</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4Git%E5%92%8CNode%E7%89%88%E6%9C%AC"><span class="nav-number">1.1.</span> <span class="nav-text">确认Git和Node版本</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E8%A3%85hexo-cli"><span class="nav-number">2.</span> <span class="nav-text">安装hexo-cli</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4Hexo%E5%AE%89%E8%A3%85%E7%89%88%E6%9C%AC"><span class="nav-number">2.1.</span> <span class="nav-text">确认Hexo安装版本</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEPowerShell%E6%89%A7%E8%A1%8C%E7%AD%96%E7%95%A5%E5%85%81%E8%AE%B8%E7%AD%BE%E5%90%8D%E8%84%9A%E6%9C%AC%E8%BF%90%E8%A1%8C"><span class="nav-number">2.2.</span> <span class="nav-text">设置PowerShell执行策略允许签名脚本运行</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96Hexo"><span class="nav-number">3.</span> <span class="nav-text">初始化Hexo</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEHexo"><span class="nav-number">4.</span> <span class="nav-text">配置Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9"><span class="nav-number">4.1.</span> <span class="nav-text">主要内容</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%8D%9A%E5%AE%A2%E5%86%85%E5%AE%B9"><span class="nav-number">5.</span> <span class="nav-text">生成博客内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8Hexo-%E4%B8%B4%E6%97%B6Server"><span class="nav-number">6.</span> <span class="nav-text">启动Hexo (临时Server)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">主题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%E5%AE%89%E8%A3%85"><span class="nav-number">7.1.</span> <span class="nav-text">主题安装</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%85%8D%E7%BD%AENext%E4%B8%BB%E9%A2%98"><span class="nav-number">7.2.</span> <span class="nav-text">配置Next主题</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9-1"><span class="nav-number">7.3.</span> <span class="nav-text">主要内容</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">7.4.</span> <span class="nav-text">安装依赖</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD-%E5%8F%AF%E9%80%89"><span class="nav-number">7.5.</span> <span class="nav-text">配置搜索功能 (可选)</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Github%E6%89%98%E7%AE%A1"><span class="nav-number">8.</span> <span class="nav-text">Github托管</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEGithub"><span class="nav-number">8.1.</span> <span class="nav-text">配置Github</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Hexo%E9%83%A8%E7%BD%B2%E5%88%B0Github"><span class="nav-number">8.2.</span> <span class="nav-text">Hexo部署到Github</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEGithub-Pages%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AE"><span class="nav-number">9.</span> <span class="nav-text">配置Github Pages实现自定义域名访问</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">准备环境</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4Git%E5%92%8CNode%E7%89%88%E6%9C%AC"><span class="nav-number">1.1.</span> <span class="nav-text">确认Git和Node版本</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E8%A3%85hexo-cli"><span class="nav-number">2.</span> <span class="nav-text">安装hexo-cli</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4Hexo%E5%AE%89%E8%A3%85%E7%89%88%E6%9C%AC"><span class="nav-number">2.1.</span> <span class="nav-text">确认Hexo安装版本</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEPowerShell%E6%89%A7%E8%A1%8C%E7%AD%96%E7%95%A5%E5%85%81%E8%AE%B8%E7%AD%BE%E5%90%8D%E8%84%9A%E6%9C%AC%E8%BF%90%E8%A1%8C"><span class="nav-number">2.2.</span> <span class="nav-text">设置PowerShell执行策略允许签名脚本运行</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96Hexo"><span class="nav-number">3.</span> <span class="nav-text">初始化Hexo</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEHexo"><span class="nav-number">4.</span> <span class="nav-text">配置Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9"><span class="nav-number">4.1.</span> <span class="nav-text">主要内容</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%8D%9A%E5%AE%A2%E5%86%85%E5%AE%B9"><span class="nav-number">5.</span> <span class="nav-text">生成博客内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8Hexo-%E4%B8%B4%E6%97%B6Server"><span class="nav-number">6.</span> <span class="nav-text">启动Hexo (临时Server)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">主题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%E5%AE%89%E8%A3%85"><span class="nav-number">7.1.</span> <span class="nav-text">主题安装</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%85%8D%E7%BD%AENext%E4%B8%BB%E9%A2%98"><span class="nav-number">7.2.</span> <span class="nav-text">配置Next主题</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9-1"><span class="nav-number">7.3.</span> <span class="nav-text">主要内容</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">7.4.</span> <span class="nav-text">安装依赖</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD-%E5%8F%AF%E9%80%89"><span class="nav-number">7.5.</span> <span class="nav-text">配置搜索功能 (可选)</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Github%E6%89%98%E7%AE%A1"><span class="nav-number">8.</span> <span class="nav-text">Github托管</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEGithub"><span class="nav-number">8.1.</span> <span class="nav-text">配置Github</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Hexo%E9%83%A8%E7%BD%B2%E5%88%B0Github"><span class="nav-number">8.2.</span> <span class="nav-text">Hexo部署到Github</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEGithub-Pages%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AE"><span class="nav-number">9.</span> <span class="nav-text">配置Github Pages实现自定义域名访问</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E2%91%A0-%E8%BF%9B%E5%85%A5Pages%E7%BD%91%E9%A1%B5%E6%89%8B%E5%8A%A8%E4%BF%AE%E6%94%B9"><span class="nav-number">9.1.</span> <span class="nav-text">①.进入Pages网页手动修改</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E2%91%A1-%E9%83%A8%E7%BD%B2%E6%97%B6%E6%8C%87%E5%AE%9ACNAME"><span class="nav-number">9.2.</span> <span class="nav-text">②.部署时指定CNAME</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -468,12 +470,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-flash.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zakikun.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#FF3030","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":false},"motion":{"enable":true,"async":true,"transition":{"post_block":"slideDownIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideDownIn","sidebar":"slideDownIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="记一篇家庭NAS主机折腾随记">
+<meta property="og:url" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Zakikun">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares说明.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares%E6%96%87%E4%BB%B6%E5%A4%B9%E8%AE%BE%E7%BD%AE.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹Allocation%20Method.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Use%20Cache.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Export.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Security.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置SMB%20User%20Access.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Docker.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Unraid-Docker-Add%20Container.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Docker容器配置.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/VMS.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/APPS.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Unassigned%20Devices.png">
+<meta property="og:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/SETTINGS插件.png">
+<meta property="article:published_time" content="2021-04-20T08:19:15.000Z">
+<meta property="article:modified_time" content="2021-04-20T12:47:09.492Z">
+<meta property="article:author" content="Zakikun">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="随记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares.png">
+
+<link rel="canonical" href="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>记一篇家庭NAS主机折腾随记 | Zakikun</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-159344419-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3c3461d1a92b20ede23a9960542cb89e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zakikun</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Zakikun">
+      <meta itemprop="description" content="写一写自己想写的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zakikun">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一篇家庭NAS主机折腾随记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-20 16:19:15 / 修改时间：20:47:09" itemprop="dateCreated datePublished" datetime="2021-04-20T16:19:15+08:00">2021-04-20</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<span id="more"></span>
+
+<p>时隔5个月多，2020年11月换了一个城市打工，每天忙于新工作环境的适应和工作内容的掌握熟悉，再加上我个人没有写日记的习惯，导致博客的基本没有什么有效内容产出，就连这一篇随记也是空闲了下来才想着摸着鱼，一边写一边回忆这一周以来折腾家里原来跑着Windows Server 2019的NAS主机。</p>
+<h4 id="正篇"><a href="#正篇" class="headerlink" title="正篇"></a>正篇</h4><p>Unraid系统除了拥有一般NAS系统的功能，还能运行Docker、虚拟机，直通硬件也十分方便，并且社区扩展活跃丰富，能添加各式各样嵌入到系统界面的插件，非常适合做全功能一体机的底层系统。</p>
+<p>目前家里的主机的所有Docker容器和虚拟机都正常在Unraid内运行，已经稳定运行一个月。</p>
+<h5 id="系统安装"><a href="#系统安装" class="headerlink" title="系统安装"></a>系统安装</h5><p>网上有很多教程，甚至还有很多盗版教程，系统安装这一部分没有什么需要填坑的地方，需要注意的是如果想入正版Key，一般只能通过正常安装试用Trial key，然后在系统Tools - Registration里点击购买，官网没有相关的购买链接。</p>
+<h5 id="NAS"><a href="#NAS" class="headerlink" title="NAS"></a>NAS</h5><p>Unraid的NAS部分十分简洁，整个系统按照授权版本限制可加入序列的存储硬盘数量，包括校验盘Parity Drive和缓存盘Cache Drive，但不包括用于启动的U盘。</p>
+<h6 id="Shares-共享文件夹"><a href="#Shares-共享文件夹" class="headerlink" title="Shares/共享文件夹"></a>Shares/共享文件夹</h6><img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares.png" alt="Shares" style="zoom:50%;">
+
+<p>在系统安装完毕后，在MAIN页面可以看到所有被系统识别出来的存储设备，包括启动引导用的USB设备。硬盘序列Array加入硬盘后，需要在下方执行Format格式化才能供Unraid使用。在Array启动之后，Shares页面默认创建几个文件夹，对应的是不同分类文件的存储，并且默认启用SMB方式共享。</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares说明.png" alt="Shares说明" style="zoom:33%;">
+
+<p>appdata：主要存放Docker容器的文件，包括从容器内挂载volume出来的数据</p>
+<p>domains：存放一些虚拟机会用到的镜像、虚拟磁盘文件，比如x86软路由的虚拟磁盘img、黑群晖的启动引导文件</p>
+<p>isos：系统镜像、安装引导文件等等都存放在这里</p>
+<p>system：Docker功能虚拟磁盘的默认存储路径，虚拟机主要虚拟磁盘的存放地方</p>
+<p><img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares%E6%96%87%E4%BB%B6%E5%A4%B9%E8%AE%BE%E7%BD%AE.png" alt="image-20210420202928417"></p>
+<p>点击文件夹名字后会进入该文件夹具体的设置页面，需要注意的地方：</p>
+<p>Allocation method：</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹Allocation Method.png" alt="Shares文件夹Allocation Method" style="zoom:50%;">
+
+<p>①High-water：以1T+2T+3T举例，当新文件写入的时候，系统会检测一次所有在array里的硬盘剩余容量，以最大容量硬盘的50%容量为基准 (3T÷2=1.5T)，随机写入到剩余容量&gt;1.5T的硬盘内（也就是2T和3T的硬盘），等到两个硬盘剩余容量都只剩1.5T，则进行第二次检测，基准变为0.75T，以此类推，系统会优先把文件写入剩余容量最大的硬盘内。<br>②Fill-up：系统以array中硬盘的顺序依次写入新文件，一般要搭配最小剩余容量使用，不然会引发因空间不足导致的Docker和虚拟机报错运行的问题<br>③Most-free：系统选取剩余容量最大的硬盘写入，需要注意的是每写入一个文件都会检测一遍各个硬盘的剩余容量，大量小文件写入时可能会大幅度影响array的I/O性能</p>
+<p>Minimum free space：该文件夹的最小剩余容量</p>
+<p>Split Level：分散目录的层级，默认为自动分散。简单来说就是根据设定的层级锁定文件夹分散到哪个硬盘里，Level 1是在Shares页面创建的文件夹Media，设置Top Level 1意味着Media文件夹可以分散存储到各个硬盘内但后续所有层级的文件夹则固定存储在对应的硬盘内；Top Level 2意味着Media/xxx这两层文件夹都会分散存储到各个硬盘内但后续第三层Media/xxx/xxx以后的所有层级文件夹都被固定存储在相应的硬盘内</p>
+<p>![Shares文件夹Include disks](记一篇家庭NAS主机折腾随记/Shares文件夹Include disks.png)</p>
+<p>Included disks：该文件夹存储包含的物理硬盘，默认为ALL，即新文件写入会随机存储到其中一个硬盘内</p>
+<p>Excluded disks：该文件夹存储排除的物理硬盘，默认为None，即不排除新文件写入某一个或几个硬盘内</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Use Cache.png" alt="image-20210420203153112" style="zoom:50%;">
+
+<p>Use Cache：系统默认有一个每天03:40启动的程序Mover，用来针对这个设置的<br>①No：不使用缓存盘，即新文件写入到该文件夹时直接写入Array的硬盘内</p>
+<p>②Yes：使用缓存盘，即新文件写入到该文件夹时直接写入到缓存盘内，但Mover运行会将文件从缓存盘中转移到Array中</p>
+<p>③Only：只使用缓存盘，即新文件一直留存在缓存盘内，即使Mover运行也不会转移数据</p>
+<p>④Prefer：该文件夹倾向于使用缓存盘，直到缓存盘剩余容量低于该文件夹设置的最小剩余容量，比如缓存盘120G容量，设置60G最小剩余容量，那么当缓存盘剩余60G的时候，企图写入该文件夹的新文件就会转为直接写入Array中，一般只有存放临时或不重要的文件夹才会设置为这个策略。但个人不推荐使用这种方式，容易导致让启用缓存盘共享文件夹的相关软件因空间不足而报错</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Export.png" style="zoom:50%;">
+
+<p>Export：No、Yes、Yes（hidden）对应不共享、共享、共享但隐藏显示</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置Security.png" style="zoom:50%;">
+
+<p>Security：<br>①Public：所有人都可以读写</p>
+<p>②Secure：访客只能读取不能写入，可以在下方单独设置每个用户的读写权限</p>
+<p>③Private：访客不能读写，可以在下方单独设置每个用户的读写权限</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Shares文件夹设置SMB User Access.png" style="zoom:50%;">
+
+<h5 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h5><img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Docker.png" style="zoom:50%;">
+
+<p>First of all，Unraid的Docker是可以基本还原大部分容器运行状态的，最起码我个人使用的服务中都能通过详细配置正常使用</p>
+<p>首先当然是给Docker更换源加速下载部署，通过网页界面webui右上角的Terminal或者直接SSH登录进Unraid，新建或修改/etc/docker/daemon.json添加镜像源地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p &#x2F;etc&#x2F;docker </span><br><span class="line">tee &#x2F;etc&#x2F;docker&#x2F;daemon.json &lt;&lt;-&#39;EOF&#39; </span><br><span class="line">&#123; </span><br><span class="line">  &quot;registry-mirrors&quot;: [&quot;https:&#x2F;&#x2F;docker.mirrors.ustc.edu.cn&quot;] </span><br><span class="line">&#125; </span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Unraid-Docker-Add Container.png" style="zoom: 33%;">
+
+<p>在社区应用内有大量的docker模板提供下载，需要事先下载安装社区应用插件，即Community Applications，整个应用市场都托管在Github上，需要想点办法出国，不然会访问困难</p>
+<p>Template：模板，在社区应用APPS页面可以直接下载并加载到该页面并配置好所有东西，手动添加容器，在APPLY运行后系统也会默认将手工配置保存为用户模板，方便下次直接调用修改</p>
+<p>Repository：镜像仓库路径可以直接使用docker hub的注册镜像库路径，比如docker pull nginx拉取官方nginx镜像，则在这一行直接填入nginx就可以执行同样的命令</p>
+<p>Network Type：网络类型，Docker在启动后默认创建3个驱动分别为bridge、host、null的网络连接，容器默认使用Bridge桥接Unraid的bond0接口</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Docker容器配置.png" alt="Docker容器配置" style="zoom:50%;">
+
+<p>最后一项是核心，可以添加Path、Port、Variable、Label、Device参数，分别对应docker run中的-v、-p、-e、–label、–device，这5个选项就可以基本还原容器运行环境</p>
+<p>踩过的坑：</p>
+<ol>
+<li>每一次更改APPLY都是docker stop、docker rm、docker run，在运行比较大的容器时，要注意不能关闭页面，最好通过Terminal手工执行操作，不然通过网页操作不小心误关页面可能会导致容器启动异常</li>
+<li>某些游戏服务端的Docker镜像在启动时会无法识别Unraid自身的文件映射路径，比如我运行的求生之路2服务端，如果将服务端所在的路径/serverdata/serverfiles挂载到/mnt/user/appdata/l4d2server，如果实际文件被分散写入到disk1和disk2，那么在第二次重启运行的时候，容器就无法识别到所有在/mnt/user/appdata/l4d2server的文件。解决方法是指定挂载到物理硬盘路径内，比如/mnt/disk2/l4d2server</li>
+<li>默认的bridge网络可能不能实现容器间互通，需要创建自定义的网络才可以</li>
+<li>默认不支持Docker compose，目前官方也没放出消息要集成docker compose功能，涉及到多容器间协作的服务需要手工一个一个添加配置运行</li>
+<li>DOCKER页面的容器可以长按拖动调整顺序，这个顺序也是启用autostart的容器启动顺序</li>
+<li>要十分！十分！十分！十分！注意容器运行用户是哪一个，默认运行nobody:users，根据容器umask设置不同，有可能从容器内部挂载出去的文件夹通过smb访问没有权限修改写入甚至读取，如果不熟悉chown和chmod的可以直接在tools - new permissions里选择容器对应的挂载路径把权限全部重置一遍</li>
+</ol>
+<h5 id="VM虚拟机"><a href="#VM虚拟机" class="headerlink" title="VM虚拟机"></a>VM虚拟机</h5><img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/VMS.png" alt="image-20210420202426004" style="zoom:50%;">
+
+<p>这一块涉及不深，我只有基本的虚拟软路由翻墙和黑群晖同步照片2个虚拟机的需求，手里多了一台Intel Nuc 8放客厅作为父母的Windows娱乐影视机，所以也就没必要再折腾显卡直通，以后有机会升级到6.9还会尝试的（因为6.9对直通硬件进行了一系列优化和简便化操作）</p>
+<p>踩过的坑</p>
+<ol>
+<li>Unraid界面提供的配置选项还不够实用，虚拟网卡默认驱动都是virtio，想要上千兆或万兆网的朋友要手动切换高级视图编辑xml更改为e1000才行</li>
+<li>为了稳定兼容运行，引导方式最好选用SeaBIOS（即Legacy模式）</li>
+<li>虚拟机是可以直通硬盘的，前提是硬盘未加入Array，通过/dev/disks/by-id/硬盘ID挂载，不会影响原来就在Array里的硬盘数据，相当于同时把硬盘物理连接到unraid和虚拟机</li>
+</ol>
+<h5 id="APPS插件篇"><a href="#APPS插件篇" class="headerlink" title="APPS插件篇"></a>APPS插件篇</h5><p>这一块实用插件太多了，我只列举我自己用到的</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/APPS.png" style="zoom:50%;">
+
+<p>Community Applications：最核心的插件，社区应用其本身，没了它也就没有其他的事了，安装后直接在主界面显示APPS标签页</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/Unassigned Devices.png" style="zoom:50%;">
+
+<p>Unassigned Devices：硬盘挂载的核心，可以挂载NTFS文件系统的硬盘，安装后默认选项在Main - Unassigned Devices，找到对应的硬盘选择Mount，点击硬盘ID左边的+号展开，对应分区点进去打开Share并等待一会，就能在Unraid的SMB共享里看到对应文件夹</p>
+<img src="/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/SETTINGS插件.png" style="zoom:50%;">
+
+<p>User Scripts：比较关键的APP，相当于在unraid主机上的crontab，安装后默认选项在SETTINGS - User ultilities - User Scripts</p>
+<p>Fix Common Problems：检测Unraid运行的常见问题，主要是能看到登录尝试次数，查看是否有人爆破服务器，SETTINGS - User ultilities - Fix Common Problems</p>
+<p>Dynamix Wireguard：基于WireGuard的VPN服务端，安装后可以配置私人VPN，配合tunsafe之类的客户端可以接入Unraid所在的内网访问资源，十分方便，SETTINGS - Network services - VPN Manager</p>
+<p>Dynamix Cache Directories：缓存目录访问记录到内存里，注意不是缓存读取的文件到内存里，这个插件仅加速文件目录路径的访问，安装后选项默认在SETTINGS - User ultilities - Folder Caching</p>
+<p>Dynamix SSD TRIM：使用缓存盘必备的插件，能定时为SSD执行TRIM，安装后选项默认在SETTINGS - Scheduler</p>
+<h4 id="前篇"><a href="#前篇" class="headerlink" title="前篇"></a>前篇</h4><h5 id="一切的开端"><a href="#一切的开端" class="headerlink" title="一切的开端"></a>一切的开端</h5><p>2019年10月，我和家人收藏影音资源和存档的照片越来越多，家里人对数据存储已经产生了比较迫切的需求，恰逢工作交接期，周末比较空闲，就想着要买一台NAS主机。起初打算考虑品牌机，比如群晖Synology、威联通QNAP，这几家品牌机基本都属于明面上卖产品，实际上卖系统软件服务的厂商，所以主机硬件性能普遍弱，而我们又想着既然都要花钱买NAS，干脆自己组一台AIO主机，于是就着手购买相关硬件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">主板：英业达B400G3_10G（带6个+4个SATA3口，2个SATA控制器，2个PCI-E x16槽位，自带超低规格的显示核心，4物理网口的4张板载千兆网卡）</span><br><span class="line">CPU：Intel E3 1230 v3</span><br><span class="line">内存：二手服务器拆机ECC内存8GB x4</span><br><span class="line">显卡：GTX750Ti （不需要额外供电）</span><br></pre></td></tr></table></figure>
+
+<h5 id="底层系统的选择"><a href="#底层系统的选择" class="headerlink" title="底层系统的选择"></a>底层系统的选择</h5><p>因为家里人需要Windows系统，所以AIO主机在底层系统可供的选择很少，常见的是ESXi和PVE，但都有不可回避的问题存在。</p>
+<p>ESXi：商业系统成熟稳定，硬件直通操作方便，但是不知是什么原因，主机配的Nvidia GTX750亮机卡始终不能直通到Win7虚拟机内使用，这也就没办法利用显卡流畅播放各种视频</p>
+<p>PVE：基于Debian的Linux系统，可视化操作太少，基本依赖命令，一旦需要调试，家里人根本不会操作</p>
+<p>最后选择了可以驱动N卡又能组建硬盘存储池的Windows Server，毕竟硬盘都是从现成的电脑主机上拆下来，3T+2T如果分开存储，在文件管理和容量上都会很不方便</p>
+<h5 id="Windows-Server实现All-in-One的局限"><a href="#Windows-Server实现All-in-One的局限" class="headerlink" title="Windows Server实现All in One的局限"></a>Windows Server实现All in One的局限</h5><p>在满足各种需求的过程中，我逐渐感受到Windows系统在自建功能服务的局限性，林林总总的服务端都提供不了持续稳定的windows版更新支持，而且Windows的Docker在使用上经常会出现我无法调试的文件系统错误，主要体现在容器运行时内外部文件读写执行上。</p>
+<p>Docker for windows切换为Linux内核后，通过创建一个基于Linux系统的Hyper-V虚拟机实现Docker服务运行。Docker需要访问Windows宿主机文件系统时提示需要开启共享盘，所以个人猜测Docker是基于smb方式与宿主机实现文件系统互通的，于是就出现了一系列解决不了的问题。</p>
+<p>Windows的Mysql被容器使用的时候会出现莫名其妙的连接错误，包括网络连接超时失败、文件读写权限错误等等，最后是改成使用Mariadb容器将数据库环境运行在Docker内部才正常运作使用，同样的情况也出现在Windows的Nginx上</p>
+<p>Windows还有一个非常影响体验的问题，那就是十分让人迷惑的本地文件系统权限以及网络共享SMB权限机制，可能给Server启用AD域管理会简便明了一点，可是我没有仔细研究，因为马上就要回到正篇考虑更换底层操作系统了。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zakikun
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://blog.zakikun.vip/2021/04/20/%E8%AE%B0%E4%B8%80%E7%AF%87%E5%AE%B6%E5%BA%ADNAS%E4%B8%BB%E6%9C%BA%E6%8A%98%E8%85%BE%E9%9A%8F%E8%AE%B0/" title="记一篇家庭NAS主机折腾随记">https://blog.zakikun.vip/2021/04/20/记一篇家庭NAS主机折腾随记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+              <a href="/tags/%E9%9A%8F%E8%AE%B0/" rel="tag"><i class="fa fa-tag"></i> 随记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/18/%E8%BF%98%E5%8E%9FHexo-Next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/" rel="prev" title="还原Hexo Next主题配置">
+      <i class="fa fa-chevron-left"></i> 还原Hexo Next主题配置
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">正篇</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text">系统安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NAS"><span class="nav-number">1.2.</span> <span class="nav-text">NAS</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Shares-%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.2.1.</span> <span class="nav-text">Shares&#x2F;共享文件夹</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Docker"><span class="nav-number">1.3.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#VM%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">VM虚拟机</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#APPS%E6%8F%92%E4%BB%B6%E7%AF%87"><span class="nav-number">1.5.</span> <span class="nav-text">APPS插件篇</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E7%AF%87"><span class="nav-number">2.</span> <span class="nav-text">前篇</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E5%88%87%E7%9A%84%E5%BC%80%E7%AB%AF"><span class="nav-number">2.1.</span> <span class="nav-text">一切的开端</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BA%95%E5%B1%82%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-number">2.2.</span> <span class="nav-text">底层系统的选择</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Windows-Server%E5%AE%9E%E7%8E%B0All-in-One%E7%9A%84%E5%B1%80%E9%99%90"><span class="nav-number">2.3.</span> <span class="nav-text">Windows Server实现All in One的局限</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zakikun"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Zakikun</p>
+  <div class="site-description" itemprop="description">写一写自己想写的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wyxls" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wyxls" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wyxls123@gmail.com" title="E-Mail → mailto:wyxls123@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/wyxls" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;wyxls" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/RoxasCheng" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;RoxasCheng" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/54611" title="BiliBili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;54611" rel="noopener" target="_blank"><i class="fas fa-tv fa-fw"></i>BiliBili</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zakikun</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278645801&web_id=1278645801"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
