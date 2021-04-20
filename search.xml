@@ -1,43 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Letsencrypt免费90天证书简易说明(ACME)</title>
-    <url>/2020/02/19/Letsencrypt%E5%85%8D%E8%B4%B990%E5%A4%A9%E8%AF%81%E4%B9%A6%E7%AE%80%E6%98%93%E8%AF%B4%E6%98%8E-ACME/</url>
-    <content><![CDATA[<hr>
-<span id="more"></span>
-
-<h3 id="LINUX环境"><a href="#LINUX环境" class="headerlink" title="LINUX环境"></a>LINUX环境</h3><p>#安装 acme.sh<br><code>curl  https://get.acme.sh | sh</code><br>注：将会安装到 ~/.acme.sh/ 目录下，以后所有的配置默认也在这个目录下</p>
-<p>#设置 alias:<br><code>alias acme.sh=~/.acme.sh/acme.sh</code><br>#自动创建 cronjob, 每天 0:00 点自动检测所有的证书, 如果快过期了, 需要更新, 则会自动更新证书.</p>
-<p>#输入阿里云API KEY环境参数</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export Ali_Key&#x3D;&quot;填写AccessKey ID&quot;</span><br><span class="line">export Ali_Secret&#x3D;&quot;填写Access Key Secret&quot;</span><br></pre></td></tr></table></figure>
-
-<p>#申请通配域名证书<br><code>acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code><br>#证书生成成功后，默认保存在.acme.sh/example.com/</p>
-<p>#更新证书 (–force 强制更新)<br><code>acme.sh --renew --dns -d example.com -d *.example.com --force</code><br>#默认自动60天更新</p>
-<p>#转换证书为PKCS12格式（申请到证书之后，默认不带密码参数[–password pfx-password]）<br><code>acme.sh --toPkcs -d example.com</code></p>
-<h3 id="Docker-For-Windows（简易版）"><a href="#Docker-For-Windows（简易版）" class="headerlink" title="Docker For Windows（简易版）"></a>Docker For Windows（简易版）</h3><p>#事前准备：<br>1.安装Docker For Windows（<a href="https://docs.docker.com/docker-for-windows/install/%EF%BC%89">https://docs.docker.com/docker-for-windows/install/）</a><br>2.设置共享磁盘（下文以D盘已通过Docker For Windows设置共享为例）</p>
-<p>#以管理员身份启动PowerShell<br>#拉取acme.sh镜像<br><code>docker pull neilpang/acme.sh</code></p>
-<p>#检查镜像是否下载完成<br><code>docker images</code></p>
-<p>#申请通配证书（如果不保留Docker后台运行自动更新证书，可在run后加–rm）<br><code>docker run -d acmedocker -e Ali_Key=填写AccessKey ID -e Ali_Secret=填写Access Key Secret --name=acmedocker neilpang/acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code></p>
-<p> </p>
-<h3 id="Docker-For-Windows-后台运行自动更新证书）"><a href="#Docker-For-Windows-后台运行自动更新证书）" class="headerlink" title="Docker For Windows(后台运行自动更新证书）"></a>Docker For Windows(后台运行自动更新证书）</h3><p>#事前准备：<br>1.安装Docker for Windows（<a href="https://docs.docker.com/docker-for-windows/install/%EF%BC%89">https://docs.docker.com/docker-for-windows/install/）</a><br>2.设置共享磁盘, Docker for Windows-settings-Shared drivers（下文以D盘已通过Docker For Windows设置共享为例）</p>
-<p>#以管理员身份启动PowerShell<br>#拉取acme.sh镜像<br><code>docker pull neilpang/acme.sh</code></p>
-<p>#检查镜像是否下载完成<br><code>docker images</code></p>
-<p>#编写docker-compose.yml并保存为acmesh.yml（下文默认保存为D:\Docker\Composefiles\acmesh.yml）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &#39;3&#39;</span><br><span class="line">services:</span><br><span class="line">  acmedocker:</span><br><span class="line">    image: neilpang&#x2F;acme.sh</span><br><span class="line">    container_name: acmedocker</span><br><span class="line">    restart: always</span><br><span class="line">    command: </span><br><span class="line">        daemon</span><br><span class="line">    environment:</span><br><span class="line">      - Ali_Key&#x3D;填写AccessKey ID</span><br><span class="line">      - Ali_Secret&#x3D;填写Access Key Secret</span><br></pre></td></tr></table></figure>
-
-<p>*#以后台形式运行neilpang/acme.sh<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml up -d acmedocker</code></p>
-<p>*#申请通配域名证书<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml exec acmedocker --issue --dns dns_ali -d example.com -d *.example.com</code><br>#可选命令：<code>docker exec acmedocker acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code></p>
-<p>*#转换证书为PKCS12格式（申请到证书之后，默认不带密码参数[–password pfx-password]）<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml exec acme.sh --toPkcs -d example.com</code><br>#可选命令：<code>docker exec acmedocker acme.sh --toPkcs -d example.com</code></p>
-<p>*#复制证书到宿主机本地路径（当PowerShell工作目录在D盘时docker cp命令的默认工作路径为D:\）<br><code>docker cp acmedocker:/acme.sh/example.com /Docker</code></p>
-<p>*#关闭acmedocker（关闭后所有文件将重置，无法更新证书）<br><code>docker kill acmedocker</code></p>
-<p>#带星号*的命令可写入.ps1文件并运行，让PowerShell进行一键搞定</p>
-<p>#默认60天更新证书，可强制更新–force<br><code>docker exec acmedocker acme.sh --renew --dns -d example.com -d *.example.com</code></p>
-]]></content>
-      <tags>
-        <tag>技术</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo+Github托管(Windows)的搭建简单示例</title>
     <url>/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/</url>
     <content><![CDATA[<hr>
@@ -138,20 +101,78 @@
       </tags>
   </entry>
   <entry>
-    <title>王国之心3 Remind 快速通行代码全成就简易攻略</title>
-    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E5%BF%AB%E9%80%9F%E9%80%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%85%A8%E6%88%90%E5%B0%B1%E7%AE%80%E6%98%93%E6%94%BB%E7%95%A5/</url>
+    <title>Letsencrypt免费90天证书简易说明(ACME)</title>
+    <url>/2020/02/19/Letsencrypt%E5%85%8D%E8%B4%B990%E5%A4%A9%E8%AF%81%E4%B9%A6%E7%AE%80%E6%98%93%E8%AF%B4%E6%98%8E-ACME/</url>
     <content><![CDATA[<hr>
 <span id="more"></span>
 
-<p>首先！快速通行代码的成就PS4奖杯没有难度要求，推荐使用简单难度完成</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.空中挑战：在空中击倒13个敌人，途中不能落地（魔法、连结、合作技、游乐设施特技动作击倒的敌人无效）</span><br><span class="line"></span><br><span class="line">2.暴怒形态挑战：以暴怒形态一次打倒20个“阴影”和”新型阴影“</span><br><span class="line"></span><br><span class="line">3.连结挑战：以任一连结一次打倒77个敌人</span><br><span class="line"></span><br><span class="line">4.破冰挑战：在同一场战斗中冰冻30个敌人</span><br><span class="line"></span><br><span class="line">5.基伽巨兵挑战：以任一游乐设施特技动作一次达到5架基伽巨兵</span><br><span class="line"></span><br><span class="line">6.空中漫步挑战：不走地面，并在5次落地内从森林高塔抵达科洛那的城镇</span><br><span class="line"></span><br><span class="line">7.墨黑幽魂挑战：驾驶积木船打倒潜藏在云雾星河的攻击卫星“墨黑幽魂”并以A阶级通关</span><br><span class="line"></span><br><span class="line">8.保龄球挑战：以合作动作“尖叫全倒”一次打倒10个敌人</span><br><span class="line"></span><br><span class="line">9.只开启战斗代码“险中求生”通过2星的任一战斗传送门</span><br></pre></td></tr></table></figure>
+<h3 id="LINUX环境"><a href="#LINUX环境" class="headerlink" title="LINUX环境"></a>LINUX环境</h3><p>#安装 acme.sh<br><code>curl  https://get.acme.sh | sh</code><br>注：将会安装到 ~/.acme.sh/ 目录下，以后所有的配置默认也在这个目录下</p>
+<p>#设置 alias:<br><code>alias acme.sh=~/.acme.sh/acme.sh</code><br>#自动创建 cronjob, 每天 0:00 点自动检测所有的证书, 如果快过期了, 需要更新, 则会自动更新证书.</p>
+<p>#输入阿里云API KEY环境参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export Ali_Key&#x3D;&quot;填写AccessKey ID&quot;</span><br><span class="line">export Ali_Secret&#x3D;&quot;填写Access Key Secret&quot;</span><br></pre></td></tr></table></figure>
 
-<p>1、2、3、4理论上可以在键刃墓地“千人斩”战斗中完成，需要注意的是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.只要脚不落地都算在内，可以找敌人多而且能反复触发爬墙的场景完成，另外只能靠索拉本体平A击杀敌人。我个人认为比较早能完成的场景在奥林帕斯世界，有一处底下崩塌全是火，两侧都是爬墙的场景，前期留意把两个猪队友的伤害技能都关闭，不然会抢人头</span><br><span class="line"></span><br><span class="line">2.暴怒形态需要残血才会触发指令，建议带上“情绪崩堤”（残血时100%触发）</span><br><span class="line"></span><br><span class="line">3.连结挑战开启“持久连结”，时间延长至少一分钟，比较轻松能完成的场景：索拉拯救7位守护者心进入奥林帕斯世界时，路上全是阴影和新型阴影，另外就是千人斩部分</span><br><span class="line"></span><br><span class="line">4.破冰挑战的“冰冻”指的是暴雪魔法打中敌人出现冰冻效果，一发暴雪就打死敌人不计算在内，这个成就我个人最早能完成的场景是怪兽工厂倒数的某一次大场地战斗中，需要积攒欢笑能量，此处只要不触发尖叫全倒的RC指令，敌人就会无限刷新，注意前期不要等级刷得太高，魔法力太高会直接秒怪而不计算成就</span><br><span class="line"></span><br><span class="line">5.个人推荐场景在玩具商店3楼的儿童乐园处，此处刷出的机甲兵玩具不止5架，但要记住伤害要足</span><br><span class="line"></span><br><span class="line">6.建议在到达键刃墓地完成千人斩后拿到滑翔再做，途中触发爬墙是不计算5次落地内的，人物一旦落地千万别动左摇杆（个人惨痛经历），比较麻烦的只有一点：途中有一处大场景需要反复高跳到达高台（剧情中需要乐佩用头发荡2次那里）</span><br><span class="line"></span><br><span class="line">7.这个刷过积木船隐藏boss A评价的都知道怎么打，快速通行代码模式可以开局就拿到最强积木船金闪闪，然后就是一直刷boss的浮游护盾，一个护盾一万点分数，刷够100万分就是A评价</span><br><span class="line"></span><br><span class="line">8.怪兽公司限定，在两次需要积攒欢笑能量触发尖叫全倒的战斗中都可以比较轻松地完成，主要别让猪队友输出太高，怪物尽量集中，10只要求其实不怎么高</span><br><span class="line"></span><br><span class="line">9.通关后才会解锁显示的成就，险中求胜敌我3倍伤害，我个人完成的战斗传送门是No.2 奥林帕斯-天界-天顶，里面只有2只小Boss怪，64攻67魔面板，3倍伤害下利用连结的超高比例减伤，可以轻松磨死</span><br></pre></td></tr></table></figure>
+<p>#申请通配域名证书<br><code>acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code><br>#证书生成成功后，默认保存在.acme.sh/example.com/</p>
+<p>#更新证书 (–force 强制更新)<br><code>acme.sh --renew --dns -d example.com -d *.example.com --force</code><br>#默认自动60天更新</p>
+<p>#转换证书为PKCS12格式（申请到证书之后，默认不带密码参数[–password pfx-password]）<br><code>acme.sh --toPkcs -d example.com</code></p>
+<h3 id="Docker-For-Windows（简易版）"><a href="#Docker-For-Windows（简易版）" class="headerlink" title="Docker For Windows（简易版）"></a>Docker For Windows（简易版）</h3><p>#事前准备：<br>1.安装Docker For Windows（<a href="https://docs.docker.com/docker-for-windows/install/%EF%BC%89">https://docs.docker.com/docker-for-windows/install/）</a><br>2.设置共享磁盘（下文以D盘已通过Docker For Windows设置共享为例）</p>
+<p>#以管理员身份启动PowerShell<br>#拉取acme.sh镜像<br><code>docker pull neilpang/acme.sh</code></p>
+<p>#检查镜像是否下载完成<br><code>docker images</code></p>
+<p>#申请通配证书（如果不保留Docker后台运行自动更新证书，可在run后加–rm）<br><code>docker run -d acmedocker -e Ali_Key=填写AccessKey ID -e Ali_Secret=填写Access Key Secret --name=acmedocker neilpang/acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code></p>
+<p> </p>
+<h3 id="Docker-For-Windows-后台运行自动更新证书）"><a href="#Docker-For-Windows-后台运行自动更新证书）" class="headerlink" title="Docker For Windows(后台运行自动更新证书）"></a>Docker For Windows(后台运行自动更新证书）</h3><p>#事前准备：<br>1.安装Docker for Windows（<a href="https://docs.docker.com/docker-for-windows/install/%EF%BC%89">https://docs.docker.com/docker-for-windows/install/）</a><br>2.设置共享磁盘, Docker for Windows-settings-Shared drivers（下文以D盘已通过Docker For Windows设置共享为例）</p>
+<p>#以管理员身份启动PowerShell<br>#拉取acme.sh镜像<br><code>docker pull neilpang/acme.sh</code></p>
+<p>#检查镜像是否下载完成<br><code>docker images</code></p>
+<p>#编写docker-compose.yml并保存为acmesh.yml（下文默认保存为D:\Docker\Composefiles\acmesh.yml）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &#39;3&#39;</span><br><span class="line">services:</span><br><span class="line">  acmedocker:</span><br><span class="line">    image: neilpang&#x2F;acme.sh</span><br><span class="line">    container_name: acmedocker</span><br><span class="line">    restart: always</span><br><span class="line">    command: </span><br><span class="line">        daemon</span><br><span class="line">    environment:</span><br><span class="line">      - Ali_Key&#x3D;填写AccessKey ID</span><br><span class="line">      - Ali_Secret&#x3D;填写Access Key Secret</span><br></pre></td></tr></table></figure>
 
+<p>*#以后台形式运行neilpang/acme.sh<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml up -d acmedocker</code></p>
+<p>*#申请通配域名证书<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml exec acmedocker --issue --dns dns_ali -d example.com -d *.example.com</code><br>#可选命令：<code>docker exec acmedocker acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code></p>
+<p>*#转换证书为PKCS12格式（申请到证书之后，默认不带密码参数[–password pfx-password]）<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml exec acme.sh --toPkcs -d example.com</code><br>#可选命令：<code>docker exec acmedocker acme.sh --toPkcs -d example.com</code></p>
+<p>*#复制证书到宿主机本地路径（当PowerShell工作目录在D盘时docker cp命令的默认工作路径为D:\）<br><code>docker cp acmedocker:/acme.sh/example.com /Docker</code></p>
+<p>*#关闭acmedocker（关闭后所有文件将重置，无法更新证书）<br><code>docker kill acmedocker</code></p>
+<p>#带星号*的命令可写入.ps1文件并运行，让PowerShell进行一键搞定</p>
+<p>#默认60天更新证书，可强制更新–force<br><code>docker exec acmedocker acme.sh --renew --dns -d example.com -d *.example.com</code></p>
 ]]></content>
       <tags>
-        <tag>游戏</tag>
+        <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建私人图床 (Minio+PicUploader))</title>
+    <url>/2020/03/15/%E6%90%AD%E5%BB%BA%E7%A7%81%E4%BA%BA%E5%9B%BE%E5%BA%8A-Minio-PicUploader/</url>
+    <content><![CDATA[<hr>
+<span id="more"></span>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker： Docker for windows 2.2.0.3 (Engine: 19.03.5, Compose: 1.25.4)</span><br><span class="line">Nginx： Docker (nginx:latest)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Minio"><a href="#Minio" class="headerlink" title="Minio"></a>Minio</h4><p><a href="https://github.com/minio/minio">官方Github</a></p>
+<h5 id="简单运行"><a href="#简单运行" class="headerlink" title="简单运行"></a>简单运行</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull minio&#x2F;minio</span><br><span class="line">docker run -p 9000:9000 minio&#x2F;minio server &#x2F;data</span><br></pre></td></tr></table></figure>
+
+<h5 id="Minio-compose-yml"><a href="#Minio-compose-yml" class="headerlink" title="Minio compose.yml"></a>Minio compose.yml</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  minio:</span><br><span class="line">    image: minio&#x2F;minio</span><br><span class="line">    container_name: minio</span><br><span class="line">    environment:</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - MINIO_ACCESS_KEY&#x3D;accesskey				# 管理用户名</span><br><span class="line">      - MINIO_SECRET_KEY&#x3D;secretkey				# 管理密码</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;minio&#x2F;data:&#x2F;data				#外置存储</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;minio&#x2F;config:&#x2F;root&#x2F;.minio		#外置配置</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;9000&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    command:</span><br><span class="line">      - server</span><br><span class="line">      - &#x2F;data</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
+
+<h5 id="使用SSL证书"><a href="#使用SSL证书" class="headerlink" title="使用SSL证书"></a>使用SSL证书</h5><p>在/root/.minio中放入证书和私钥文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;root&#x2F;.minio&#x2F;certs&#x2F;public.crt</span><br><span class="line">&#x2F;root&#x2F;.minio&#x2F;certs&#x2F;private.key</span><br></pre></td></tr></table></figure>
+
+<h5 id="使用MinIO"><a href="#使用MinIO" class="headerlink" title="使用MinIO"></a>使用MinIO</h5><ol>
+<li><p>访问 <a href="http://localhost:9000/">http://localhost:9000/</a> 进入MinIO管理界面</p>
+</li>
+<li><p>创建bucket，名称最小3个字符，不允许有大写字母、下划线、特殊字符 如@#等</p>
+</li>
+<li><p>给bucket内所有文件增加只读策略，实现永久外链访问 (关键步骤) </p>
+</li>
+</ol>
+<h4 id="PicUploader"><a href="#PicUploader" class="headerlink" title="PicUploader"></a>PicUploader</h4><p><a href="https://github.com/xiebruce/PicUploader">官方Github</a></p>
+<h5 id="PicUploader-compose-yml"><a href="#PicUploader-compose-yml" class="headerlink" title="PicUploader compose.yml"></a>PicUploader compose.yml</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  picuploader:</span><br><span class="line">    image: leonyff&#x2F;picuploader:latest</span><br><span class="line">    container_name: picuploader</span><br><span class="line">    environment:</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - USER&#x3D;user					# Web用户名</span><br><span class="line">      - PASSWD&#x3D;password				# Web用户密码</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;C&#x2F;Docker&#x2F;picuploader&#x2F;config.php:&#x2F;var&#x2F;www&#x2F;PicUploader&#x2F;config&#x2F;config.php		#外挂配置文件</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
+
+<p>可访问 <a href="http://localhost/">http://localhost:80</a> 进入WEB界面</p>
+<h5 id="配置config-php"><a href="#配置config-php" class="headerlink" title="配置config.php"></a>配置config.php</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	</span><br><span class="line">	&#x2F;&#x2F; 开源自建对象存储服务器Minio：https:&#x2F;&#x2F;github.com&#x2F;minio&#x2F;minio</span><br><span class="line">	&#39;minio&#39; &#x3D;&gt; [</span><br><span class="line">		&#39;name&#39; &#x3D;&gt; &#39;Minio&#39;,</span><br><span class="line">		&#39;AccessKeyId&#39; &#x3D;&gt; &#39;accesskey&#39;,</span><br><span class="line">		&#39;AccessKeySecret&#39; &#x3D;&gt; &#39;secretkey&#39;,</span><br><span class="line">		&#x2F;&#x2F;如果你的minio服务器未设置region，那就留空</span><br><span class="line">		&#39;region&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">		&#39;bucket&#39; &#x3D;&gt; &#39;images&#39;,</span><br><span class="line">		&#39;endpoint&#39; &#x3D;&gt; &#39;http(s):&#x2F;&#x2F;域名:端口&#39;,</span><br><span class="line">		&#x2F;&#x2F;自定义域名，如果为空，则默认使用endpoint作为域名</span><br><span class="line">		&#39;domain&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">		&#x2F;&#x2F;自定义目录格式：2019&#x2F;03&#x2F;31</span><br><span class="line">		&#39;directory&#39; &#x3D;&gt; &#39;&#x2F;&#39;,</span><br><span class="line">		&#x2F;&#x2F;使用代理，格式：http:&#x2F;&#x2F;127.0.0.1:1087</span><br><span class="line">		&#39;proxy&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">	],</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<h5 id="Nginx-HTTPS访问-以容器互访为例"><a href="#Nginx-HTTPS访问-以容器互访为例" class="headerlink" title="Nginx HTTPS访问 (以容器互访为例)"></a>Nginx HTTPS访问 (以容器互访为例)</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;</span><br><span class="line">    server_name minio.domain.com;      										# 监听请求域名</span><br><span class="line"></span><br><span class="line">    ssl_certificate       &#x2F;etc&#x2F;ssl&#x2F;cert.cer;								# 证书路径</span><br><span class="line">    ssl_certificate_key   &#x2F;etc&#x2F;ssl&#x2F;private.key;								# 私钥路径</span><br><span class="line">    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">	</span><br><span class="line">    client_max_body_size 10m;</span><br><span class="line">    fastcgi_buffers 64 4K;</span><br><span class="line">    </span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass https:&#x2F;&#x2F;minio:9000&#x2F;;								# 如果minio用了证书，则反代https</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_buffer_size 1M;</span><br><span class="line">        proxy_buffers 8 1M;</span><br><span class="line">        proxy_busy_buffers_size 1M;</span><br><span class="line">        proxy_temp_file_write_size 1M;</span><br><span class="line">        proxy_connect_timeout 300s;</span><br><span class="line">        proxy_send_timeout 300s;</span><br><span class="line">        proxy_read_timeout 300s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>PicUploader同理反代80端口，配置好后就能通过 <a href="https://minio.domain.com/">https://minio.domain.com</a> 就访问Web界面了</p>
+]]></content>
+      <tags>
+        <tag>技术</tag>
       </tags>
   </entry>
   <entry>
@@ -297,41 +318,55 @@
       </tags>
   </entry>
   <entry>
-    <title>搭建私人图床 (Minio+PicUploader))</title>
-    <url>/2020/03/15/%E6%90%AD%E5%BB%BA%E7%A7%81%E4%BA%BA%E5%9B%BE%E5%BA%8A-Minio-PicUploader/</url>
+    <title>王国之心3 Remind 快速通行代码全成就简易攻略</title>
+    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E5%BF%AB%E9%80%9F%E9%80%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%85%A8%E6%88%90%E5%B0%B1%E7%AE%80%E6%98%93%E6%94%BB%E7%95%A5/</url>
     <content><![CDATA[<hr>
 <span id="more"></span>
 
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker： Docker for windows 2.2.0.3 (Engine: 19.03.5, Compose: 1.25.4)</span><br><span class="line">Nginx： Docker (nginx:latest)</span><br></pre></td></tr></table></figure>
+<p>首先！快速通行代码的成就PS4奖杯没有难度要求，推荐使用简单难度完成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.空中挑战：在空中击倒13个敌人，途中不能落地（魔法、连结、合作技、游乐设施特技动作击倒的敌人无效）</span><br><span class="line"></span><br><span class="line">2.暴怒形态挑战：以暴怒形态一次打倒20个“阴影”和”新型阴影“</span><br><span class="line"></span><br><span class="line">3.连结挑战：以任一连结一次打倒77个敌人</span><br><span class="line"></span><br><span class="line">4.破冰挑战：在同一场战斗中冰冻30个敌人</span><br><span class="line"></span><br><span class="line">5.基伽巨兵挑战：以任一游乐设施特技动作一次达到5架基伽巨兵</span><br><span class="line"></span><br><span class="line">6.空中漫步挑战：不走地面，并在5次落地内从森林高塔抵达科洛那的城镇</span><br><span class="line"></span><br><span class="line">7.墨黑幽魂挑战：驾驶积木船打倒潜藏在云雾星河的攻击卫星“墨黑幽魂”并以A阶级通关</span><br><span class="line"></span><br><span class="line">8.保龄球挑战：以合作动作“尖叫全倒”一次打倒10个敌人</span><br><span class="line"></span><br><span class="line">9.只开启战斗代码“险中求生”通过2星的任一战斗传送门</span><br></pre></td></tr></table></figure>
 
-<h4 id="Minio"><a href="#Minio" class="headerlink" title="Minio"></a>Minio</h4><p><a href="https://github.com/minio/minio">官方Github</a></p>
-<h5 id="简单运行"><a href="#简单运行" class="headerlink" title="简单运行"></a>简单运行</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull minio&#x2F;minio</span><br><span class="line">docker run -p 9000:9000 minio&#x2F;minio server &#x2F;data</span><br></pre></td></tr></table></figure>
+<p>1、2、3、4理论上可以在键刃墓地“千人斩”战斗中完成，需要注意的是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.只要脚不落地都算在内，可以找敌人多而且能反复触发爬墙的场景完成，另外只能靠索拉本体平A击杀敌人。我个人认为比较早能完成的场景在奥林帕斯世界，有一处底下崩塌全是火，两侧都是爬墙的场景，前期留意把两个猪队友的伤害技能都关闭，不然会抢人头</span><br><span class="line"></span><br><span class="line">2.暴怒形态需要残血才会触发指令，建议带上“情绪崩堤”（残血时100%触发）</span><br><span class="line"></span><br><span class="line">3.连结挑战开启“持久连结”，时间延长至少一分钟，比较轻松能完成的场景：索拉拯救7位守护者心进入奥林帕斯世界时，路上全是阴影和新型阴影，另外就是千人斩部分</span><br><span class="line"></span><br><span class="line">4.破冰挑战的“冰冻”指的是暴雪魔法打中敌人出现冰冻效果，一发暴雪就打死敌人不计算在内，这个成就我个人最早能完成的场景是怪兽工厂倒数的某一次大场地战斗中，需要积攒欢笑能量，此处只要不触发尖叫全倒的RC指令，敌人就会无限刷新，注意前期不要等级刷得太高，魔法力太高会直接秒怪而不计算成就</span><br><span class="line"></span><br><span class="line">5.个人推荐场景在玩具商店3楼的儿童乐园处，此处刷出的机甲兵玩具不止5架，但要记住伤害要足</span><br><span class="line"></span><br><span class="line">6.建议在到达键刃墓地完成千人斩后拿到滑翔再做，途中触发爬墙是不计算5次落地内的，人物一旦落地千万别动左摇杆（个人惨痛经历），比较麻烦的只有一点：途中有一处大场景需要反复高跳到达高台（剧情中需要乐佩用头发荡2次那里）</span><br><span class="line"></span><br><span class="line">7.这个刷过积木船隐藏boss A评价的都知道怎么打，快速通行代码模式可以开局就拿到最强积木船金闪闪，然后就是一直刷boss的浮游护盾，一个护盾一万点分数，刷够100万分就是A评价</span><br><span class="line"></span><br><span class="line">8.怪兽公司限定，在两次需要积攒欢笑能量触发尖叫全倒的战斗中都可以比较轻松地完成，主要别让猪队友输出太高，怪物尽量集中，10只要求其实不怎么高</span><br><span class="line"></span><br><span class="line">9.通关后才会解锁显示的成就，险中求胜敌我3倍伤害，我个人完成的战斗传送门是No.2 奥林帕斯-天界-天顶，里面只有2只小Boss怪，64攻67魔面板，3倍伤害下利用连结的超高比例减伤，可以轻松磨死</span><br></pre></td></tr></table></figure>
 
-<h5 id="Minio-compose-yml"><a href="#Minio-compose-yml" class="headerlink" title="Minio compose.yml"></a>Minio compose.yml</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  minio:</span><br><span class="line">    image: minio&#x2F;minio</span><br><span class="line">    container_name: minio</span><br><span class="line">    environment:</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - MINIO_ACCESS_KEY&#x3D;accesskey				# 管理用户名</span><br><span class="line">      - MINIO_SECRET_KEY&#x3D;secretkey				# 管理密码</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;minio&#x2F;data:&#x2F;data				#外置存储</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;minio&#x2F;config:&#x2F;root&#x2F;.minio		#外置配置</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;9000&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    command:</span><br><span class="line">      - server</span><br><span class="line">      - &#x2F;data</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
-
-<h5 id="使用SSL证书"><a href="#使用SSL证书" class="headerlink" title="使用SSL证书"></a>使用SSL证书</h5><p>在/root/.minio中放入证书和私钥文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;root&#x2F;.minio&#x2F;certs&#x2F;public.crt</span><br><span class="line">&#x2F;root&#x2F;.minio&#x2F;certs&#x2F;private.key</span><br></pre></td></tr></table></figure>
-
-<h5 id="使用MinIO"><a href="#使用MinIO" class="headerlink" title="使用MinIO"></a>使用MinIO</h5><ol>
-<li><p>访问 <a href="http://localhost:9000/">http://localhost:9000/</a> 进入MinIO管理界面</p>
-</li>
-<li><p>创建bucket，名称最小3个字符，不允许有大写字母、下划线、特殊字符 如@#等</p>
-</li>
-<li><p>给bucket内所有文件增加只读策略，实现永久外链访问 (关键步骤) </p>
-</li>
-</ol>
-<h4 id="PicUploader"><a href="#PicUploader" class="headerlink" title="PicUploader"></a>PicUploader</h4><p><a href="https://github.com/xiebruce/PicUploader">官方Github</a></p>
-<h5 id="PicUploader-compose-yml"><a href="#PicUploader-compose-yml" class="headerlink" title="PicUploader compose.yml"></a>PicUploader compose.yml</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  picuploader:</span><br><span class="line">    image: leonyff&#x2F;picuploader:latest</span><br><span class="line">    container_name: picuploader</span><br><span class="line">    environment:</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">      - USER&#x3D;user					# Web用户名</span><br><span class="line">      - PASSWD&#x3D;password				# Web用户密码</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;C&#x2F;Docker&#x2F;picuploader&#x2F;config.php:&#x2F;var&#x2F;www&#x2F;PicUploader&#x2F;config&#x2F;config.php		#外挂配置文件</span><br><span class="line">    expose:</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
-
-<p>可访问 <a href="http://localhost/">http://localhost:80</a> 进入WEB界面</p>
-<h5 id="配置config-php"><a href="#配置config-php" class="headerlink" title="配置config.php"></a>配置config.php</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	</span><br><span class="line">	&#x2F;&#x2F; 开源自建对象存储服务器Minio：https:&#x2F;&#x2F;github.com&#x2F;minio&#x2F;minio</span><br><span class="line">	&#39;minio&#39; &#x3D;&gt; [</span><br><span class="line">		&#39;name&#39; &#x3D;&gt; &#39;Minio&#39;,</span><br><span class="line">		&#39;AccessKeyId&#39; &#x3D;&gt; &#39;accesskey&#39;,</span><br><span class="line">		&#39;AccessKeySecret&#39; &#x3D;&gt; &#39;secretkey&#39;,</span><br><span class="line">		&#x2F;&#x2F;如果你的minio服务器未设置region，那就留空</span><br><span class="line">		&#39;region&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">		&#39;bucket&#39; &#x3D;&gt; &#39;images&#39;,</span><br><span class="line">		&#39;endpoint&#39; &#x3D;&gt; &#39;http(s):&#x2F;&#x2F;域名:端口&#39;,</span><br><span class="line">		&#x2F;&#x2F;自定义域名，如果为空，则默认使用endpoint作为域名</span><br><span class="line">		&#39;domain&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">		&#x2F;&#x2F;自定义目录格式：2019&#x2F;03&#x2F;31</span><br><span class="line">		&#39;directory&#39; &#x3D;&gt; &#39;&#x2F;&#39;,</span><br><span class="line">		&#x2F;&#x2F;使用代理，格式：http:&#x2F;&#x2F;127.0.0.1:1087</span><br><span class="line">		&#39;proxy&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">	],</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
-
-<h5 id="Nginx-HTTPS访问-以容器互访为例"><a href="#Nginx-HTTPS访问-以容器互访为例" class="headerlink" title="Nginx HTTPS访问 (以容器互访为例)"></a>Nginx HTTPS访问 (以容器互访为例)</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;</span><br><span class="line">    server_name minio.domain.com;      										# 监听请求域名</span><br><span class="line"></span><br><span class="line">    ssl_certificate       &#x2F;etc&#x2F;ssl&#x2F;cert.cer;								# 证书路径</span><br><span class="line">    ssl_certificate_key   &#x2F;etc&#x2F;ssl&#x2F;private.key;								# 私钥路径</span><br><span class="line">    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">	</span><br><span class="line">    client_max_body_size 10m;</span><br><span class="line">    fastcgi_buffers 64 4K;</span><br><span class="line">    </span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass https:&#x2F;&#x2F;minio:9000&#x2F;;								# 如果minio用了证书，则反代https</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_buffer_size 1M;</span><br><span class="line">        proxy_buffers 8 1M;</span><br><span class="line">        proxy_busy_buffers_size 1M;</span><br><span class="line">        proxy_temp_file_write_size 1M;</span><br><span class="line">        proxy_connect_timeout 300s;</span><br><span class="line">        proxy_send_timeout 300s;</span><br><span class="line">        proxy_read_timeout 300s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>PicUploader同理反代80端口，配置好后就能通过 <a href="https://minio.domain.com/">https://minio.domain.com</a> 就访问Web界面了</p>
 ]]></content>
       <tags>
-        <tag>技术</tag>
+        <tag>游戏</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>王国之心3 Remind 黑暗代码模式分数详情</title>
+    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E9%BB%91%E6%9A%97%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%BC%8F%E5%88%86%E6%95%B0%E8%AF%A6%E6%83%85/</url>
+    <content><![CDATA[<hr>
+<span id="more"></span>
+
+<p>任意通关存档开启二周目后在开场选择属性、技能成长路线后会出现选择游戏模式场景，此处即可选择黑暗代码模式</p>
+<p>另外在挑战完secret boss夜空之后会在当前存档开启快速通行模式，与黑暗代码可以共存使用，但同时使用二者选项无法解锁黑暗代码模式的分数记录，请注意这一点</p>
+<hr>
+<p>原贴地址就不发完整的，怕帖子被吞，搜Official Pro Code Merit Scoring可能会搜到，以下是粗略翻译：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">主线副boss: 5,000分/个（一般是每个世界的第一个boss）</span><br><span class="line">主线终boss: 10,000分/个（一般是每个世界的第二个boss，部分世界多boss合一计算）</span><br><span class="line">暗狱从者: 20,000分（挑战点14）</span><br><span class="line">数据里十三机关: 25,000分/个（DLC Limitcut）</span><br><span class="line">ReMind 赛亚诺特大师: 10,000分（DLC Remind主线最终boss）</span><br><span class="line">夜空: 30,000分（Secret Episode 最终隐藏boss）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>拿到满级评价A Rank所需分数：370000，评分与所选难度无关，只与你开启的选项星数有关，计算如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">单个boss分数&#x3D;基础分÷40(满星)×星数</span><br></pre></td></tr></table></figure>
+
+<p>比如关闭前三项一共取消12星，主线终boss单个分数=10000÷40×28=7000</p>
+<hr>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">奥林帕斯：石魔5000、冰魔熔+岩魔龙+卷风魔10000</span><br><span class="line">黄昏镇：恶魔浪潮5000</span><br><span class="line">玩具箱：安洁莉可·安柏5000、玩具王10000</span><br><span class="line">科洛那王国：疯狂马车5000、狂乱之母10000</span><br><span class="line">怪兽城市：恐惧凝冻10000</span><br><span class="line">艾伦戴尔：棉花糖5000、斯库尔10000</span><br><span class="line">加勒比海：闪电钓手5000、深海阎王10000</span><br><span class="line">旧京山：黑暗方块5000、黑色杯面10000</span><br><span class="line">键刃墓地：黑暗浪潮10000、青年赛亚诺特+安塞姆+杰姆纳思10000</span><br><span class="line">斯卡拉·亚德·卡尔姆：装甲赛亚诺特10000、赛亚诺特大师10000</span><br><span class="line">Remind：赛亚诺特大师10000</span><br></pre></td></tr></table></figure>
+
+<p>全程维持28星，本篇+DLC主线通关分数10.85万，暗狱从者1.4万，总计12.85万，所以十三机关是跑不掉的了，加上十三机关的22.75万，总计应该是35万，距离满评还差2万</p>
+<p>怎么办呢？要不加星，要不把夜空也打了，打完夜空必定A Rank，前提是你得先顶过28星十三机关的蹂躏</p>
+<hr>
+<p>最后一次粗略计算：</p>
+<p>1、靠主线拉分，需要全程BOSS战34星以上，溢出3250分</p>
+<p>2、靠十三机关拉分，全BOSS维持31星以上，溢出4375分（也就是可以有2个boss关掉HP减退“偷懒”的程度）</p>
+<p>至于要在哪些boss上偷懒，只能各位自己比划打算了</p>
+<hr>
+<p>最后我只能说：SE你tm就是狗13，37万分卡得这么极限，要么磨时间打主线拉分，要么死练技术打变态boss拉分，要么面对一个最变态的boss夜空</p>
+<p>DLC奖杯没有白金杯，老子不稀罕这逼死普通玩家的DLC奖杯！</p>
+]]></content>
+      <tags>
+        <tag>游戏</tag>
       </tags>
   </entry>
   <entry>
@@ -403,41 +438,6 @@
 ]]></content>
       <tags>
         <tag>备忘</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>王国之心3 Remind 黑暗代码模式分数详情</title>
-    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E9%BB%91%E6%9A%97%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%BC%8F%E5%88%86%E6%95%B0%E8%AF%A6%E6%83%85/</url>
-    <content><![CDATA[<hr>
-<span id="more"></span>
-
-<p>任意通关存档开启二周目后在开场选择属性、技能成长路线后会出现选择游戏模式场景，此处即可选择黑暗代码模式</p>
-<p>另外在挑战完secret boss夜空之后会在当前存档开启快速通行模式，与黑暗代码可以共存使用，但同时使用二者选项无法解锁黑暗代码模式的分数记录，请注意这一点</p>
-<hr>
-<p>原贴地址就不发完整的，怕帖子被吞，搜Official Pro Code Merit Scoring可能会搜到，以下是粗略翻译：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">主线副boss: 5,000分/个（一般是每个世界的第一个boss）</span><br><span class="line">主线终boss: 10,000分/个（一般是每个世界的第二个boss，部分世界多boss合一计算）</span><br><span class="line">暗狱从者: 20,000分（挑战点14）</span><br><span class="line">数据里十三机关: 25,000分/个（DLC Limitcut）</span><br><span class="line">ReMind 赛亚诺特大师: 10,000分（DLC Remind主线最终boss）</span><br><span class="line">夜空: 30,000分（Secret Episode 最终隐藏boss）</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>拿到满级评价A Rank所需分数：370000，评分与所选难度无关，只与你开启的选项星数有关，计算如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">单个boss分数&#x3D;基础分÷40(满星)×星数</span><br></pre></td></tr></table></figure>
-
-<p>比如关闭前三项一共取消12星，主线终boss单个分数=10000÷40×28=7000</p>
-<hr>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">奥林帕斯：石魔5000、冰魔熔+岩魔龙+卷风魔10000</span><br><span class="line">黄昏镇：恶魔浪潮5000</span><br><span class="line">玩具箱：安洁莉可·安柏5000、玩具王10000</span><br><span class="line">科洛那王国：疯狂马车5000、狂乱之母10000</span><br><span class="line">怪兽城市：恐惧凝冻10000</span><br><span class="line">艾伦戴尔：棉花糖5000、斯库尔10000</span><br><span class="line">加勒比海：闪电钓手5000、深海阎王10000</span><br><span class="line">旧京山：黑暗方块5000、黑色杯面10000</span><br><span class="line">键刃墓地：黑暗浪潮10000、青年赛亚诺特+安塞姆+杰姆纳思10000</span><br><span class="line">斯卡拉·亚德·卡尔姆：装甲赛亚诺特10000、赛亚诺特大师10000</span><br><span class="line">Remind：赛亚诺特大师10000</span><br></pre></td></tr></table></figure>
-
-<p>全程维持28星，本篇+DLC主线通关分数10.85万，暗狱从者1.4万，总计12.85万，所以十三机关是跑不掉的了，加上十三机关的22.75万，总计应该是35万，距离满评还差2万</p>
-<p>怎么办呢？要不加星，要不把夜空也打了，打完夜空必定A Rank，前提是你得先顶过28星十三机关的蹂躏</p>
-<hr>
-<p>最后一次粗略计算：</p>
-<p>1、靠主线拉分，需要全程BOSS战34星以上，溢出3250分</p>
-<p>2、靠十三机关拉分，全BOSS维持31星以上，溢出4375分（也就是可以有2个boss关掉HP减退“偷懒”的程度）</p>
-<p>至于要在哪些boss上偷懒，只能各位自己比划打算了</p>
-<hr>
-<p>最后我只能说：SE你tm就是狗13，37万分卡得这么极限，要么磨时间打主线拉分，要么死练技术打变态boss拉分，要么面对一个最变态的boss夜空</p>
-<p>DLC奖杯没有白金杯，老子不稀罕这逼死普通玩家的DLC奖杯！</p>
-]]></content>
-      <tags>
-        <tag>游戏</tag>
       </tags>
   </entry>
   <entry>
