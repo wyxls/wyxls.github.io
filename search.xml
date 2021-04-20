@@ -1,145 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hexo+Github托管(Windows)的简单示例</title>
-    <url>/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/</url>
-    <content><![CDATA[<hr>
-<span id="more"></span>
-
-<p>首先，所有东西都在这里：<a href="https://github.com/theme-next/hexo-theme-next">https://github.com/theme-next/hexo-theme-next</a></p>
-<h5 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Git: https:&#x2F;&#x2F;git-scm.com&#x2F;download&#x2F;win</span><br><span class="line">Node.js: https:&#x2F;&#x2F;nodejs.org&#x2F;zh-cn&#x2F;</span><br><span class="line">#Nodejs推荐安装LTS长期支持版</span><br></pre></td></tr></table></figure>
-
-<h6 id="确认Git和Node版本"><a href="#确认Git和Node版本" class="headerlink" title="确认Git和Node版本"></a>确认Git和Node版本</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git version</span><br><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
-
-<p>#教程基于git 2.2.5.0 windows, node v12.16.0, npm v6.13.4</p>
-<h5 id="安装hexo-cli"><a href="#安装hexo-cli" class="headerlink" title="安装hexo-cli"></a>安装hexo-cli</h5><p><code>npm install hexo-cli -g</code></p>
-<h6 id="确认Hexo安装版本"><a href="#确认Hexo安装版本" class="headerlink" title="确认Hexo安装版本"></a>确认Hexo安装版本</h6><p><code>hexo -v</code></p>
-<p>视网络环境不同，下载安装速度不同，国内网络一般过程比较久</p>
-<h6 id="设置PowerShell执行策略允许签名脚本运行"><a href="#设置PowerShell执行策略允许签名脚本运行" class="headerlink" title="设置PowerShell执行策略允许签名脚本运行"></a>设置PowerShell执行策略允许签名脚本运行</h6><p>出于安全目的，Win10默认不允许运行外部脚本，需要设置策略允许。</p>
-<p><code>Set-ExecutionPolicy RemoteSigned</code></p>
-<h5 id="初始化Hexo"><a href="#初始化Hexo" class="headerlink" title="初始化Hexo"></a>初始化Hexo</h5><p><code>hexo init</code></p>
-<p>根据网络环境不同，初始化速度不同。可能会出现依赖缺失，根据提示执行 <code>npm install</code> 即可</p>
-<h5 id="配置Hexo"><a href="#配置Hexo" class="headerlink" title="配置Hexo"></a>配置Hexo</h5><p>用文本软件编辑blog/_config.yml，详细介绍参考<a href="https://hexo.io/docs/configuration.html">https://hexo.io/docs/configuration.html</a></p>
-<h6 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#网站设置</span><br><span class="line"></span><br><span class="line">#标题</span><br><span class="line">title: Hexo</span><br><span class="line">#副标题</span><br><span class="line">subtitle: &#39;&#39;</span><br><span class="line">#介绍, 可用于SEO</span><br><span class="line">description: &#39;&#39;</span><br><span class="line">#关键词, 可用于SEO, 逗号隔开</span><br><span class="line">keywords:</span><br><span class="line">#作者</span><br><span class="line">author: John Doe</span><br><span class="line">#语言</span><br><span class="line">language: zh</span><br><span class="line">#时间区域</span><br><span class="line">timezone: &#39;Asia&#x2F;Shanghai&#39;</span><br><span class="line"></span><br><span class="line">#网站链接</span><br><span class="line">url: http:&#x2F;&#x2F;yoursite.com</span><br><span class="line"></span><br><span class="line">#部署</span><br><span class="line">deploy:</span><br><span class="line">  type: &#39;git&#39;</span><br><span class="line">  repo: https:&#x2F;&#x2F;github.com&#x2F;yourusername&#x2F;yourusername.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<h5 id="生成博客内容"><a href="#生成博客内容" class="headerlink" title="生成博客内容"></a>生成博客内容</h5><p><code>hexo g</code> 或者 <code>hexo generate</code></p>
-<h5 id="启动Hexo-临时Server"><a href="#启动Hexo-临时Server" class="headerlink" title="启动Hexo (临时Server)"></a>启动Hexo (临时Server)</h5><p><code>hexo s</code> 或者 <code>hexo server</code></p>
-<p>默认访问地址为localhost:4000，可通过局域网访问</p>
-<h5 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h5><p> 基于Theme Next Gemini</p>
-<p><a href="https://gemini.theme-next.org/">https://gemini.theme-next.org</a></p>
-<p><a href="https://github.com/theme-next/hexo-theme-next">https://github.com/theme-next/hexo-theme-next</a></p>
-<h6 id="主题安装"><a href="#主题安装" class="headerlink" title="主题安装"></a>主题安装</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd blog</span><br><span class="line">mkdir themes&#x2F;next</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next themes&#x2F;next</span><br></pre></td></tr></table></figure>
-
-<p>git clone完成后编辑blogs/_config.yml</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
-
-<h6 id="配置Next主题"><a href="#配置Next主题" class="headerlink" title="配置Next主题"></a>配置Next主题</h6><p>编辑themes/next/_config.yml</p>
-<h6 id="主要内容-1"><a href="#主要内容-1" class="headerlink" title="主要内容"></a>主要内容</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#语言</span><br><span class="line">language: zh-CN		#Next默认英文语言, 需要手动加入该行, 在themes&#x2F;next&#x2F;languages内查看支持语言</span><br><span class="line"></span><br><span class="line">#网站图标</span><br><span class="line">favicon:</span><br><span class="line"></span><br><span class="line">#页面脚部</span><br><span class="line">footer:</span><br><span class="line"></span><br><span class="line">#主题组合类型</span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line">#菜单设置</span><br><span class="line">menu:</span><br><span class="line">menu_settings:</span><br><span class="line"></span><br><span class="line">#侧边栏</span><br><span class="line">sidebar:</span><br><span class="line"></span><br><span class="line">#头像</span><br><span class="line">avatar:</span><br><span class="line"></span><br><span class="line">#社交媒体</span><br><span class="line">social:				#社交媒体永久链接</span><br><span class="line">social_icons:		#社交媒体图标</span><br><span class="line"></span><br><span class="line">#文章设置</span><br><span class="line">post_meta:			#文章元素设置</span><br><span class="line">tag_icon:			#标签tag图标</span><br><span class="line">reward_settings: 	#打赏设置</span><br><span class="line">reward:				#打赏图片</span><br><span class="line"></span><br><span class="line">#其他主题设定</span><br><span class="line">text_align:			#文字排版</span><br><span class="line">codeblock:			#代码块样式设置</span><br><span class="line">back2top:			#返回顶部按钮</span><br><span class="line">reading_progress:	#阅读进度</span><br><span class="line">bookmark:			#书签</span><br><span class="line">github_banner:		#页面右上角Github角幅</span><br><span class="line"></span><br><span class="line">#搜索服务</span><br><span class="line">local_search:		#需要安装https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-generator-searchdb</span><br><span class="line"></span><br><span class="line">#动画效果</span><br><span class="line">motion:				#网站动态效果</span><br><span class="line">pace:				#顶部进度条, 需要安装https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace</span><br><span class="line">three:				#JS 3D库, 需要安装https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-three</span><br><span class="line">canvas_nest:		#https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-canvas-nest</span><br><span class="line">canvas_ribbon:		#https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-canvas-ribbon</span><br></pre></td></tr></table></figure>
-
-<h6 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h6><p>打开themes/next/config.yml内对应的注释网页，根据提示操作，以搜索功能和pace动画效果为例</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd blog</span><br><span class="line">npm install hexo-generator-searchdb</span><br><span class="line">cd themes&#x2F;next</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace source&#x2F;lib&#x2F;pace</span><br></pre></td></tr></table></figure>
-
-<h6 id="配置搜索功能-可选"><a href="#配置搜索功能-可选" class="headerlink" title="配置搜索功能 (可选)"></a>配置搜索功能 (可选)</h6><p>编辑blog/_config.yml</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#path - file path. By default is search.xml. If the file extension is .json, #the output format will be JSON. Otherwise XML format file will be exported.</span><br><span class="line">#field - the search scope you want to search, you can chose:</span><br><span class="line">#	post (Default) - will only cover all the posts of your blog.</span><br><span class="line">#	page - will only cover all the pages of your blog.</span><br><span class="line">#	all - will cover all the posts and pages of your blog.</span><br><span class="line">#content - whether contains the whole content of each article. If false, the #generated results only cover title and other meta info without mainbody. By #default is true.</span><br><span class="line">#format - the form of the page contents, options are:</span><br><span class="line">#	html (Default) - original html string being minified.</span><br><span class="line">#	striptags - original html string being minified, and remove all the tags.</span><br><span class="line">#	raw - markdown text of each posts or pages.</span><br><span class="line">search:</span><br><span class="line">  path: search.xml</span><br><span class="line">  field: post</span><br><span class="line">  content: true</span><br><span class="line">  format: html</span><br></pre></td></tr></table></figure>
-
-<h5 id="Github托管"><a href="#Github托管" class="headerlink" title="Github托管"></a>Github托管</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#登录https:&#x2F;&#x2F;github.com</span><br><span class="line">#创建新仓库New repository</span><br><span class="line">#仓库名指定: yourusername.github.io</span><br></pre></td></tr></table></figure>
-
-<h6 id="配置Github"><a href="#配置Github" class="headerlink" title="配置Github"></a>配置Github</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;yourusername&quot;</span><br><span class="line">git config --global user.email &quot;youruseremail&quot;</span><br><span class="line">#查看C:\User\yourusername\.ssh是否已有ssh私钥和公钥, id_rsa+id_rsa.pub</span><br><span class="line">#没有则生成ssh-keygen -t rsa -C &quot;xxx@xxx.com&quot;</span><br><span class="line">#在github-settings-SSH and GPG keys添加SSH公钥, 在id_rsa.pub内, 全文复制粘贴id_rsa.pub内容</span><br></pre></td></tr></table></figure>
-
-<h6 id="Hexo部署到Github"><a href="#Hexo部署到Github" class="headerlink" title="Hexo部署到Github"></a>Hexo部署到Github</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd blog</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-<h5 id="配置Github-Pages实现自定义域名访问"><a href="#配置Github-Pages实现自定义域名访问" class="headerlink" title="配置Github Pages实现自定义域名访问"></a>配置Github Pages实现自定义域名访问</h5><p>前提条件 (以阿里云解析为例)</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.拥有一个自己的域名</span><br><span class="line">2.DNS解析服务</span><br></pre></td></tr></table></figure>
-
-<h6 id="①-进入Pages网页手动修改"><a href="#①-进入Pages网页手动修改" class="headerlink" title="①.进入Pages网页手动修改"></a>①.进入Pages网页手动修改</h6><p>访问username.github.io repository的settings，下拉找到”Custom domain”，将其配置为自定义域名，比如domain.com或二级域名blog.domain.com</p>
-<img src="/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/Github-Pages配置.png" alt="Github-Pages设置.png" style="zoom: 50%;">
-
-<h6 id="②-部署时指定CNAME"><a href="#②-部署时指定CNAME" class="headerlink" title="②.部署时指定CNAME"></a>②.部署时指定CNAME</h6><p>在博客根目录下的source文件夹创建无扩展名的”CNAME”文件，在里面填入域名，部署到Github时就会自动更改GitHub Pages的自定义域名</p>
-<p>source/CNAME &lt;-<code>blog.domain.com</code></p>
-<p>在解析服务中添加CNAME解析</p>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>主机记录</th>
-<th>解析线路(运营商)</th>
-<th>记录值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CNAME</td>
-<td>@</td>
-<td>默认</td>
-<td>username.github.io</td>
-</tr>
-<tr>
-<td>CNAME</td>
-<td>www</td>
-<td>默认</td>
-<td>username.github.io</td>
-</tr>
-</tbody></table>
-<p>这样就能直接通过 <a href="http://www.domain.com/">www.domain.com</a> 或 domain.com访问博客</p>
-<p>二级域名则直接添加CNAME解析</p>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>主机记录</th>
-<th>解析线路(运营商)</th>
-<th>记录值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CNAME</td>
-<td>blog</td>
-<td>默认</td>
-<td>username.github.io</td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>技术</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Letsencrypt免费90天证书简易说明(ACME)</title>
-    <url>/2020/02/19/Letsencrypt%E5%85%8D%E8%B4%B990%E5%A4%A9%E8%AF%81%E4%B9%A6%E7%AE%80%E6%98%93%E8%AF%B4%E6%98%8E-ACME/</url>
-    <content><![CDATA[<hr>
-<span id="more"></span>
-
-<h3 id="LINUX环境"><a href="#LINUX环境" class="headerlink" title="LINUX环境"></a>LINUX环境</h3><p>#安装 acme.sh<br><code>curl  https://get.acme.sh | sh</code><br>注：将会安装到 ~/.acme.sh/ 目录下，以后所有的配置默认也在这个目录下</p>
-<p>#设置 alias:<br><code>alias acme.sh=~/.acme.sh/acme.sh</code><br>#自动创建 cronjob, 每天 0:00 点自动检测所有的证书, 如果快过期了, 需要更新, 则会自动更新证书.</p>
-<p>#输入阿里云API KEY环境参数</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export Ali_Key&#x3D;&quot;填写AccessKey ID&quot;</span><br><span class="line">export Ali_Secret&#x3D;&quot;填写Access Key Secret&quot;</span><br></pre></td></tr></table></figure>
-
-<p>#申请通配域名证书<br><code>acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code><br>#证书生成成功后，默认保存在.acme.sh/example.com/</p>
-<p>#更新证书 (–force 强制更新)<br><code>acme.sh --renew --dns -d example.com -d *.example.com --force</code><br>#默认自动60天更新</p>
-<p>#转换证书为PKCS12格式（申请到证书之后，默认不带密码参数[–password pfx-password]）<br><code>acme.sh --toPkcs -d example.com</code></p>
-<h3 id="Docker-For-Windows（简易版）"><a href="#Docker-For-Windows（简易版）" class="headerlink" title="Docker For Windows（简易版）"></a>Docker For Windows（简易版）</h3><p>#事前准备：<br>1.安装Docker For Windows（<a href="https://docs.docker.com/docker-for-windows/install/%EF%BC%89">https://docs.docker.com/docker-for-windows/install/）</a><br>2.设置共享磁盘（下文以D盘已通过Docker For Windows设置共享为例）</p>
-<p>#以管理员身份启动PowerShell<br>#拉取acme.sh镜像<br><code>docker pull neilpang/acme.sh</code></p>
-<p>#检查镜像是否下载完成<br><code>docker images</code></p>
-<p>#申请通配证书（如果不保留Docker后台运行自动更新证书，可在run后加–rm）<br><code>docker run -d acmedocker -e Ali_Key=填写AccessKey ID -e Ali_Secret=填写Access Key Secret --name=acmedocker neilpang/acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code></p>
-<p> </p>
-<h3 id="Docker-For-Windows-后台运行自动更新证书）"><a href="#Docker-For-Windows-后台运行自动更新证书）" class="headerlink" title="Docker For Windows(后台运行自动更新证书）"></a>Docker For Windows(后台运行自动更新证书）</h3><p>#事前准备：<br>1.安装Docker for Windows（<a href="https://docs.docker.com/docker-for-windows/install/%EF%BC%89">https://docs.docker.com/docker-for-windows/install/）</a><br>2.设置共享磁盘, Docker for Windows-settings-Shared drivers（下文以D盘已通过Docker For Windows设置共享为例）</p>
-<p>#以管理员身份启动PowerShell<br>#拉取acme.sh镜像<br><code>docker pull neilpang/acme.sh</code></p>
-<p>#检查镜像是否下载完成<br><code>docker images</code></p>
-<p>#编写docker-compose.yml并保存为acmesh.yml（下文默认保存为D:\Docker\Composefiles\acmesh.yml）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &#39;3&#39;</span><br><span class="line">services:</span><br><span class="line">  acmedocker:</span><br><span class="line">    image: neilpang&#x2F;acme.sh</span><br><span class="line">    container_name: acmedocker</span><br><span class="line">    restart: always</span><br><span class="line">    command: </span><br><span class="line">        daemon</span><br><span class="line">    environment:</span><br><span class="line">      - Ali_Key&#x3D;填写AccessKey ID</span><br><span class="line">      - Ali_Secret&#x3D;填写Access Key Secret</span><br></pre></td></tr></table></figure>
-
-<p>*#以后台形式运行neilpang/acme.sh<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml up -d acmedocker</code></p>
-<p>*#申请通配域名证书<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml exec acmedocker --issue --dns dns_ali -d example.com -d *.example.com</code><br>#可选命令：<code>docker exec acmedocker acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code></p>
-<p>*#转换证书为PKCS12格式（申请到证书之后，默认不带密码参数[–password pfx-password]）<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml exec acme.sh --toPkcs -d example.com</code><br>#可选命令：<code>docker exec acmedocker acme.sh --toPkcs -d example.com</code></p>
-<p>*#复制证书到宿主机本地路径（当PowerShell工作目录在D盘时docker cp命令的默认工作路径为D:\）<br><code>docker cp acmedocker:/acme.sh/example.com /Docker</code></p>
-<p>*#关闭acmedocker（关闭后所有文件将重置，无法更新证书）<br><code>docker kill acmedocker</code></p>
-<p>#带星号*的命令可写入.ps1文件并运行，让PowerShell进行一键搞定</p>
-<p>#默认60天更新证书，可强制更新–force<br><code>docker exec acmedocker acme.sh --renew --dns -d example.com -d *.example.com</code></p>
-]]></content>
-      <tags>
-        <tag>技术</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>搭建NextCloud (WinServer 2019+Docker for Windows)</title>
     <url>/2020/02/19/%E6%90%AD%E5%BB%BANextCloud-WinServer-2019-Docker-for-Windows/</url>
     <content><![CDATA[<hr>
@@ -282,6 +143,108 @@
       </tags>
   </entry>
   <entry>
+    <title>Hexo+Github托管(Windows)的简单示例</title>
+    <url>/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/</url>
+    <content><![CDATA[<hr>
+<span id="more"></span>
+
+<p>首先，所有东西都在这里：<a href="https://github.com/theme-next/hexo-theme-next">https://github.com/theme-next/hexo-theme-next</a></p>
+<h5 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Git: https:&#x2F;&#x2F;git-scm.com&#x2F;download&#x2F;win</span><br><span class="line">Node.js: https:&#x2F;&#x2F;nodejs.org&#x2F;zh-cn&#x2F;</span><br><span class="line">#Nodejs推荐安装LTS长期支持版</span><br></pre></td></tr></table></figure>
+
+<h6 id="确认Git和Node版本"><a href="#确认Git和Node版本" class="headerlink" title="确认Git和Node版本"></a>确认Git和Node版本</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git version</span><br><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+
+<p>#教程基于git 2.2.5.0 windows, node v12.16.0, npm v6.13.4</p>
+<h5 id="安装hexo-cli"><a href="#安装hexo-cli" class="headerlink" title="安装hexo-cli"></a>安装hexo-cli</h5><p><code>npm install hexo-cli -g</code></p>
+<h6 id="确认Hexo安装版本"><a href="#确认Hexo安装版本" class="headerlink" title="确认Hexo安装版本"></a>确认Hexo安装版本</h6><p><code>hexo -v</code></p>
+<p>视网络环境不同，下载安装速度不同，国内网络一般过程比较久</p>
+<h6 id="设置PowerShell执行策略允许签名脚本运行"><a href="#设置PowerShell执行策略允许签名脚本运行" class="headerlink" title="设置PowerShell执行策略允许签名脚本运行"></a>设置PowerShell执行策略允许签名脚本运行</h6><p>出于安全目的，Win10默认不允许运行外部脚本，需要设置策略允许。</p>
+<p><code>Set-ExecutionPolicy RemoteSigned</code></p>
+<h5 id="初始化Hexo"><a href="#初始化Hexo" class="headerlink" title="初始化Hexo"></a>初始化Hexo</h5><p><code>hexo init</code></p>
+<p>根据网络环境不同，初始化速度不同。可能会出现依赖缺失，根据提示执行 <code>npm install</code> 即可</p>
+<h5 id="配置Hexo"><a href="#配置Hexo" class="headerlink" title="配置Hexo"></a>配置Hexo</h5><p>用文本软件编辑blog/_config.yml，详细介绍参考<a href="https://hexo.io/docs/configuration.html">https://hexo.io/docs/configuration.html</a></p>
+<h6 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#网站设置</span><br><span class="line"></span><br><span class="line">#标题</span><br><span class="line">title: Hexo</span><br><span class="line">#副标题</span><br><span class="line">subtitle: &#39;&#39;</span><br><span class="line">#介绍, 可用于SEO</span><br><span class="line">description: &#39;&#39;</span><br><span class="line">#关键词, 可用于SEO, 逗号隔开</span><br><span class="line">keywords:</span><br><span class="line">#作者</span><br><span class="line">author: John Doe</span><br><span class="line">#语言</span><br><span class="line">language: zh</span><br><span class="line">#时间区域</span><br><span class="line">timezone: &#39;Asia&#x2F;Shanghai&#39;</span><br><span class="line"></span><br><span class="line">#网站链接</span><br><span class="line">url: http:&#x2F;&#x2F;yoursite.com</span><br><span class="line"></span><br><span class="line">#部署</span><br><span class="line">deploy:</span><br><span class="line">  type: &#39;git&#39;</span><br><span class="line">  repo: https:&#x2F;&#x2F;github.com&#x2F;yourusername&#x2F;yourusername.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<h5 id="生成博客内容"><a href="#生成博客内容" class="headerlink" title="生成博客内容"></a>生成博客内容</h5><p><code>hexo g</code> 或者 <code>hexo generate</code></p>
+<h5 id="启动Hexo-临时Server"><a href="#启动Hexo-临时Server" class="headerlink" title="启动Hexo (临时Server)"></a>启动Hexo (临时Server)</h5><p><code>hexo s</code> 或者 <code>hexo server</code></p>
+<p>默认访问地址为localhost:4000，可通过局域网访问</p>
+<h5 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h5><p> 基于Theme Next Gemini</p>
+<p><a href="https://gemini.theme-next.org/">https://gemini.theme-next.org</a></p>
+<p><a href="https://github.com/theme-next/hexo-theme-next">https://github.com/theme-next/hexo-theme-next</a></p>
+<h6 id="主题安装"><a href="#主题安装" class="headerlink" title="主题安装"></a>主题安装</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd blog</span><br><span class="line">mkdir themes&#x2F;next</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next themes&#x2F;next</span><br></pre></td></tr></table></figure>
+
+<p>git clone完成后编辑blogs/_config.yml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+
+<h6 id="配置Next主题"><a href="#配置Next主题" class="headerlink" title="配置Next主题"></a>配置Next主题</h6><p>编辑themes/next/_config.yml</p>
+<h6 id="主要内容-1"><a href="#主要内容-1" class="headerlink" title="主要内容"></a>主要内容</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#语言</span><br><span class="line">language: zh-CN		#Next默认英文语言, 需要手动加入该行, 在themes&#x2F;next&#x2F;languages内查看支持语言</span><br><span class="line"></span><br><span class="line">#网站图标</span><br><span class="line">favicon:</span><br><span class="line"></span><br><span class="line">#页面脚部</span><br><span class="line">footer:</span><br><span class="line"></span><br><span class="line">#主题组合类型</span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line">#菜单设置</span><br><span class="line">menu:</span><br><span class="line">menu_settings:</span><br><span class="line"></span><br><span class="line">#侧边栏</span><br><span class="line">sidebar:</span><br><span class="line"></span><br><span class="line">#头像</span><br><span class="line">avatar:</span><br><span class="line"></span><br><span class="line">#社交媒体</span><br><span class="line">social:				#社交媒体永久链接</span><br><span class="line">social_icons:		#社交媒体图标</span><br><span class="line"></span><br><span class="line">#文章设置</span><br><span class="line">post_meta:			#文章元素设置</span><br><span class="line">tag_icon:			#标签tag图标</span><br><span class="line">reward_settings: 	#打赏设置</span><br><span class="line">reward:				#打赏图片</span><br><span class="line"></span><br><span class="line">#其他主题设定</span><br><span class="line">text_align:			#文字排版</span><br><span class="line">codeblock:			#代码块样式设置</span><br><span class="line">back2top:			#返回顶部按钮</span><br><span class="line">reading_progress:	#阅读进度</span><br><span class="line">bookmark:			#书签</span><br><span class="line">github_banner:		#页面右上角Github角幅</span><br><span class="line"></span><br><span class="line">#搜索服务</span><br><span class="line">local_search:		#需要安装https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-generator-searchdb</span><br><span class="line"></span><br><span class="line">#动画效果</span><br><span class="line">motion:				#网站动态效果</span><br><span class="line">pace:				#顶部进度条, 需要安装https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace</span><br><span class="line">three:				#JS 3D库, 需要安装https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-three</span><br><span class="line">canvas_nest:		#https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-canvas-nest</span><br><span class="line">canvas_ribbon:		#https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-canvas-ribbon</span><br></pre></td></tr></table></figure>
+
+<h6 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h6><p>打开themes/next/config.yml内对应的注释网页，根据提示操作，以搜索功能和pace动画效果为例</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd blog</span><br><span class="line">npm install hexo-generator-searchdb</span><br><span class="line">cd themes&#x2F;next</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace source&#x2F;lib&#x2F;pace</span><br></pre></td></tr></table></figure>
+
+<h6 id="配置搜索功能-可选"><a href="#配置搜索功能-可选" class="headerlink" title="配置搜索功能 (可选)"></a>配置搜索功能 (可选)</h6><p>编辑blog/_config.yml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#path - file path. By default is search.xml. If the file extension is .json, #the output format will be JSON. Otherwise XML format file will be exported.</span><br><span class="line">#field - the search scope you want to search, you can chose:</span><br><span class="line">#	post (Default) - will only cover all the posts of your blog.</span><br><span class="line">#	page - will only cover all the pages of your blog.</span><br><span class="line">#	all - will cover all the posts and pages of your blog.</span><br><span class="line">#content - whether contains the whole content of each article. If false, the #generated results only cover title and other meta info without mainbody. By #default is true.</span><br><span class="line">#format - the form of the page contents, options are:</span><br><span class="line">#	html (Default) - original html string being minified.</span><br><span class="line">#	striptags - original html string being minified, and remove all the tags.</span><br><span class="line">#	raw - markdown text of each posts or pages.</span><br><span class="line">search:</span><br><span class="line">  path: search.xml</span><br><span class="line">  field: post</span><br><span class="line">  content: true</span><br><span class="line">  format: html</span><br></pre></td></tr></table></figure>
+
+<h5 id="Github托管"><a href="#Github托管" class="headerlink" title="Github托管"></a>Github托管</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#登录https:&#x2F;&#x2F;github.com</span><br><span class="line">#创建新仓库New repository</span><br><span class="line">#仓库名指定: yourusername.github.io</span><br></pre></td></tr></table></figure>
+
+<h6 id="配置Github"><a href="#配置Github" class="headerlink" title="配置Github"></a>配置Github</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;yourusername&quot;</span><br><span class="line">git config --global user.email &quot;youruseremail&quot;</span><br><span class="line">#查看C:\User\yourusername\.ssh是否已有ssh私钥和公钥, id_rsa+id_rsa.pub</span><br><span class="line">#没有则生成ssh-keygen -t rsa -C &quot;xxx@xxx.com&quot;</span><br><span class="line">#在github-settings-SSH and GPG keys添加SSH公钥, 在id_rsa.pub内, 全文复制粘贴id_rsa.pub内容</span><br></pre></td></tr></table></figure>
+
+<h6 id="Hexo部署到Github"><a href="#Hexo部署到Github" class="headerlink" title="Hexo部署到Github"></a>Hexo部署到Github</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd blog</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<h5 id="配置Github-Pages实现自定义域名访问"><a href="#配置Github-Pages实现自定义域名访问" class="headerlink" title="配置Github Pages实现自定义域名访问"></a>配置Github Pages实现自定义域名访问</h5><p>前提条件 (以阿里云解析为例)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.拥有一个自己的域名</span><br><span class="line">2.DNS解析服务</span><br></pre></td></tr></table></figure>
+
+<h6 id="①-进入Pages网页手动修改"><a href="#①-进入Pages网页手动修改" class="headerlink" title="①.进入Pages网页手动修改"></a>①.进入Pages网页手动修改</h6><p>访问username.github.io repository的settings，下拉找到”Custom domain”，将其配置为自定义域名，比如domain.com或二级域名blog.domain.com</p>
+<img src="/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/Github-Pages配置.png" alt="Github-Pages设置.png" style="zoom: 50%;">
+
+<h6 id="②-部署时指定CNAME"><a href="#②-部署时指定CNAME" class="headerlink" title="②.部署时指定CNAME"></a>②.部署时指定CNAME</h6><p>在博客根目录下的source文件夹创建无扩展名的”CNAME”文件，在里面填入域名，部署到Github时就会自动更改GitHub Pages的自定义域名</p>
+<p>source/CNAME &lt;-<code>blog.domain.com</code></p>
+<p>在解析服务中添加CNAME解析</p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>主机记录</th>
+<th>解析线路(运营商)</th>
+<th>记录值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CNAME</td>
+<td>@</td>
+<td>默认</td>
+<td>username.github.io</td>
+</tr>
+<tr>
+<td>CNAME</td>
+<td>www</td>
+<td>默认</td>
+<td>username.github.io</td>
+</tr>
+</tbody></table>
+<p>这样就能直接通过 <a href="http://www.domain.com/">www.domain.com</a> 或 domain.com访问博客</p>
+<p>二级域名则直接添加CNAME解析</p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>主机记录</th>
+<th>解析线路(运营商)</th>
+<th>记录值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CNAME</td>
+<td>blog</td>
+<td>默认</td>
+<td>username.github.io</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搭建私人图床 (Minio+PicUploader))</title>
     <url>/2020/03/15/%E6%90%AD%E5%BB%BA%E7%A7%81%E4%BA%BA%E5%9B%BE%E5%BA%8A-Minio-PicUploader/</url>
     <content><![CDATA[<hr>
@@ -355,20 +318,40 @@
       </tags>
   </entry>
   <entry>
-    <title>王国之心3 Remind 快速通行代码全成就简易攻略</title>
-    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E5%BF%AB%E9%80%9F%E9%80%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%85%A8%E6%88%90%E5%B0%B1%E7%AE%80%E6%98%93%E6%94%BB%E7%95%A5/</url>
+    <title>Letsencrypt免费90天证书简易说明(ACME)</title>
+    <url>/2020/02/19/Letsencrypt%E5%85%8D%E8%B4%B990%E5%A4%A9%E8%AF%81%E4%B9%A6%E7%AE%80%E6%98%93%E8%AF%B4%E6%98%8E-ACME/</url>
     <content><![CDATA[<hr>
 <span id="more"></span>
 
-<p>首先！快速通行代码的成就PS4奖杯没有难度要求，推荐使用简单难度完成</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.空中挑战：在空中击倒13个敌人，途中不能落地（魔法、连结、合作技、游乐设施特技动作击倒的敌人无效）</span><br><span class="line"></span><br><span class="line">2.暴怒形态挑战：以暴怒形态一次打倒20个“阴影”和”新型阴影“</span><br><span class="line"></span><br><span class="line">3.连结挑战：以任一连结一次打倒77个敌人</span><br><span class="line"></span><br><span class="line">4.破冰挑战：在同一场战斗中冰冻30个敌人</span><br><span class="line"></span><br><span class="line">5.基伽巨兵挑战：以任一游乐设施特技动作一次达到5架基伽巨兵</span><br><span class="line"></span><br><span class="line">6.空中漫步挑战：不走地面，并在5次落地内从森林高塔抵达科洛那的城镇</span><br><span class="line"></span><br><span class="line">7.墨黑幽魂挑战：驾驶积木船打倒潜藏在云雾星河的攻击卫星“墨黑幽魂”并以A阶级通关</span><br><span class="line"></span><br><span class="line">8.保龄球挑战：以合作动作“尖叫全倒”一次打倒10个敌人</span><br><span class="line"></span><br><span class="line">9.只开启战斗代码“险中求生”通过2星的任一战斗传送门</span><br></pre></td></tr></table></figure>
+<h3 id="LINUX环境"><a href="#LINUX环境" class="headerlink" title="LINUX环境"></a>LINUX环境</h3><p>#安装 acme.sh<br><code>curl  https://get.acme.sh | sh</code><br>注：将会安装到 ~/.acme.sh/ 目录下，以后所有的配置默认也在这个目录下</p>
+<p>#设置 alias:<br><code>alias acme.sh=~/.acme.sh/acme.sh</code><br>#自动创建 cronjob, 每天 0:00 点自动检测所有的证书, 如果快过期了, 需要更新, 则会自动更新证书.</p>
+<p>#输入阿里云API KEY环境参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export Ali_Key&#x3D;&quot;填写AccessKey ID&quot;</span><br><span class="line">export Ali_Secret&#x3D;&quot;填写Access Key Secret&quot;</span><br></pre></td></tr></table></figure>
 
-<p>1、2、3、4理论上可以在键刃墓地“千人斩”战斗中完成，需要注意的是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.只要脚不落地都算在内，可以找敌人多而且能反复触发爬墙的场景完成，另外只能靠索拉本体平A击杀敌人。我个人认为比较早能完成的场景在奥林帕斯世界，有一处底下崩塌全是火，两侧都是爬墙的场景，前期留意把两个猪队友的伤害技能都关闭，不然会抢人头</span><br><span class="line"></span><br><span class="line">2.暴怒形态需要残血才会触发指令，建议带上“情绪崩堤”（残血时100%触发）</span><br><span class="line"></span><br><span class="line">3.连结挑战开启“持久连结”，时间延长至少一分钟，比较轻松能完成的场景：索拉拯救7位守护者心进入奥林帕斯世界时，路上全是阴影和新型阴影，另外就是千人斩部分</span><br><span class="line"></span><br><span class="line">4.破冰挑战的“冰冻”指的是暴雪魔法打中敌人出现冰冻效果，一发暴雪就打死敌人不计算在内，这个成就我个人最早能完成的场景是怪兽工厂倒数的某一次大场地战斗中，需要积攒欢笑能量，此处只要不触发尖叫全倒的RC指令，敌人就会无限刷新，注意前期不要等级刷得太高，魔法力太高会直接秒怪而不计算成就</span><br><span class="line"></span><br><span class="line">5.个人推荐场景在玩具商店3楼的儿童乐园处，此处刷出的机甲兵玩具不止5架，但要记住伤害要足</span><br><span class="line"></span><br><span class="line">6.建议在到达键刃墓地完成千人斩后拿到滑翔再做，途中触发爬墙是不计算5次落地内的，人物一旦落地千万别动左摇杆（个人惨痛经历），比较麻烦的只有一点：途中有一处大场景需要反复高跳到达高台（剧情中需要乐佩用头发荡2次那里）</span><br><span class="line"></span><br><span class="line">7.这个刷过积木船隐藏boss A评价的都知道怎么打，快速通行代码模式可以开局就拿到最强积木船金闪闪，然后就是一直刷boss的浮游护盾，一个护盾一万点分数，刷够100万分就是A评价</span><br><span class="line"></span><br><span class="line">8.怪兽公司限定，在两次需要积攒欢笑能量触发尖叫全倒的战斗中都可以比较轻松地完成，主要别让猪队友输出太高，怪物尽量集中，10只要求其实不怎么高</span><br><span class="line"></span><br><span class="line">9.通关后才会解锁显示的成就，险中求胜敌我3倍伤害，我个人完成的战斗传送门是No.2 奥林帕斯-天界-天顶，里面只有2只小Boss怪，64攻67魔面板，3倍伤害下利用连结的超高比例减伤，可以轻松磨死</span><br></pre></td></tr></table></figure>
+<p>#申请通配域名证书<br><code>acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code><br>#证书生成成功后，默认保存在.acme.sh/example.com/</p>
+<p>#更新证书 (–force 强制更新)<br><code>acme.sh --renew --dns -d example.com -d *.example.com --force</code><br>#默认自动60天更新</p>
+<p>#转换证书为PKCS12格式（申请到证书之后，默认不带密码参数[–password pfx-password]）<br><code>acme.sh --toPkcs -d example.com</code></p>
+<h3 id="Docker-For-Windows（简易版）"><a href="#Docker-For-Windows（简易版）" class="headerlink" title="Docker For Windows（简易版）"></a>Docker For Windows（简易版）</h3><p>#事前准备：<br>1.安装Docker For Windows（<a href="https://docs.docker.com/docker-for-windows/install/%EF%BC%89">https://docs.docker.com/docker-for-windows/install/）</a><br>2.设置共享磁盘（下文以D盘已通过Docker For Windows设置共享为例）</p>
+<p>#以管理员身份启动PowerShell<br>#拉取acme.sh镜像<br><code>docker pull neilpang/acme.sh</code></p>
+<p>#检查镜像是否下载完成<br><code>docker images</code></p>
+<p>#申请通配证书（如果不保留Docker后台运行自动更新证书，可在run后加–rm）<br><code>docker run -d acmedocker -e Ali_Key=填写AccessKey ID -e Ali_Secret=填写Access Key Secret --name=acmedocker neilpang/acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code></p>
+<p> </p>
+<h3 id="Docker-For-Windows-后台运行自动更新证书）"><a href="#Docker-For-Windows-后台运行自动更新证书）" class="headerlink" title="Docker For Windows(后台运行自动更新证书）"></a>Docker For Windows(后台运行自动更新证书）</h3><p>#事前准备：<br>1.安装Docker for Windows（<a href="https://docs.docker.com/docker-for-windows/install/%EF%BC%89">https://docs.docker.com/docker-for-windows/install/）</a><br>2.设置共享磁盘, Docker for Windows-settings-Shared drivers（下文以D盘已通过Docker For Windows设置共享为例）</p>
+<p>#以管理员身份启动PowerShell<br>#拉取acme.sh镜像<br><code>docker pull neilpang/acme.sh</code></p>
+<p>#检查镜像是否下载完成<br><code>docker images</code></p>
+<p>#编写docker-compose.yml并保存为acmesh.yml（下文默认保存为D:\Docker\Composefiles\acmesh.yml）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &#39;3&#39;</span><br><span class="line">services:</span><br><span class="line">  acmedocker:</span><br><span class="line">    image: neilpang&#x2F;acme.sh</span><br><span class="line">    container_name: acmedocker</span><br><span class="line">    restart: always</span><br><span class="line">    command: </span><br><span class="line">        daemon</span><br><span class="line">    environment:</span><br><span class="line">      - Ali_Key&#x3D;填写AccessKey ID</span><br><span class="line">      - Ali_Secret&#x3D;填写Access Key Secret</span><br></pre></td></tr></table></figure>
 
+<p>*#以后台形式运行neilpang/acme.sh<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml up -d acmedocker</code></p>
+<p>*#申请通配域名证书<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml exec acmedocker --issue --dns dns_ali -d example.com -d *.example.com</code><br>#可选命令：<code>docker exec acmedocker acme.sh --issue --dns dns_ali -d example.com -d *.example.com</code></p>
+<p>*#转换证书为PKCS12格式（申请到证书之后，默认不带密码参数[–password pfx-password]）<br><code>docker-compose -f D:\Docker\Composefiles\acmesh.yml exec acme.sh --toPkcs -d example.com</code><br>#可选命令：<code>docker exec acmedocker acme.sh --toPkcs -d example.com</code></p>
+<p>*#复制证书到宿主机本地路径（当PowerShell工作目录在D盘时docker cp命令的默认工作路径为D:\）<br><code>docker cp acmedocker:/acme.sh/example.com /Docker</code></p>
+<p>*#关闭acmedocker（关闭后所有文件将重置，无法更新证书）<br><code>docker kill acmedocker</code></p>
+<p>#带星号*的命令可写入.ps1文件并运行，让PowerShell进行一键搞定</p>
+<p>#默认60天更新证书，可强制更新–force<br><code>docker exec acmedocker acme.sh --renew --dns -d example.com -d *.example.com</code></p>
 ]]></content>
       <tags>
-        <tag>游戏</tag>
+        <tag>技术</tag>
       </tags>
   </entry>
   <entry>
@@ -417,6 +400,48 @@
 ]]></content>
       <tags>
         <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>王国之心3 Remind 快速通行代码全成就简易攻略</title>
+    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E5%BF%AB%E9%80%9F%E9%80%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%85%A8%E6%88%90%E5%B0%B1%E7%AE%80%E6%98%93%E6%94%BB%E7%95%A5/</url>
+    <content><![CDATA[<hr>
+<span id="more"></span>
+
+<p>首先！快速通行代码的成就PS4奖杯没有难度要求，推荐使用简单难度完成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.空中挑战：在空中击倒13个敌人，途中不能落地（魔法、连结、合作技、游乐设施特技动作击倒的敌人无效）</span><br><span class="line"></span><br><span class="line">2.暴怒形态挑战：以暴怒形态一次打倒20个“阴影”和”新型阴影“</span><br><span class="line"></span><br><span class="line">3.连结挑战：以任一连结一次打倒77个敌人</span><br><span class="line"></span><br><span class="line">4.破冰挑战：在同一场战斗中冰冻30个敌人</span><br><span class="line"></span><br><span class="line">5.基伽巨兵挑战：以任一游乐设施特技动作一次达到5架基伽巨兵</span><br><span class="line"></span><br><span class="line">6.空中漫步挑战：不走地面，并在5次落地内从森林高塔抵达科洛那的城镇</span><br><span class="line"></span><br><span class="line">7.墨黑幽魂挑战：驾驶积木船打倒潜藏在云雾星河的攻击卫星“墨黑幽魂”并以A阶级通关</span><br><span class="line"></span><br><span class="line">8.保龄球挑战：以合作动作“尖叫全倒”一次打倒10个敌人</span><br><span class="line"></span><br><span class="line">9.只开启战斗代码“险中求生”通过2星的任一战斗传送门</span><br></pre></td></tr></table></figure>
+
+<p>1、2、3、4理论上可以在键刃墓地“千人斩”战斗中完成，需要注意的是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.只要脚不落地都算在内，可以找敌人多而且能反复触发爬墙的场景完成，另外只能靠索拉本体平A击杀敌人。我个人认为比较早能完成的场景在奥林帕斯世界，有一处底下崩塌全是火，两侧都是爬墙的场景，前期留意把两个猪队友的伤害技能都关闭，不然会抢人头</span><br><span class="line"></span><br><span class="line">2.暴怒形态需要残血才会触发指令，建议带上“情绪崩堤”（残血时100%触发）</span><br><span class="line"></span><br><span class="line">3.连结挑战开启“持久连结”，时间延长至少一分钟，比较轻松能完成的场景：索拉拯救7位守护者心进入奥林帕斯世界时，路上全是阴影和新型阴影，另外就是千人斩部分</span><br><span class="line"></span><br><span class="line">4.破冰挑战的“冰冻”指的是暴雪魔法打中敌人出现冰冻效果，一发暴雪就打死敌人不计算在内，这个成就我个人最早能完成的场景是怪兽工厂倒数的某一次大场地战斗中，需要积攒欢笑能量，此处只要不触发尖叫全倒的RC指令，敌人就会无限刷新，注意前期不要等级刷得太高，魔法力太高会直接秒怪而不计算成就</span><br><span class="line"></span><br><span class="line">5.个人推荐场景在玩具商店3楼的儿童乐园处，此处刷出的机甲兵玩具不止5架，但要记住伤害要足</span><br><span class="line"></span><br><span class="line">6.建议在到达键刃墓地完成千人斩后拿到滑翔再做，途中触发爬墙是不计算5次落地内的，人物一旦落地千万别动左摇杆（个人惨痛经历），比较麻烦的只有一点：途中有一处大场景需要反复高跳到达高台（剧情中需要乐佩用头发荡2次那里）</span><br><span class="line"></span><br><span class="line">7.这个刷过积木船隐藏boss A评价的都知道怎么打，快速通行代码模式可以开局就拿到最强积木船金闪闪，然后就是一直刷boss的浮游护盾，一个护盾一万点分数，刷够100万分就是A评价</span><br><span class="line"></span><br><span class="line">8.怪兽公司限定，在两次需要积攒欢笑能量触发尖叫全倒的战斗中都可以比较轻松地完成，主要别让猪队友输出太高，怪物尽量集中，10只要求其实不怎么高</span><br><span class="line"></span><br><span class="line">9.通关后才会解锁显示的成就，险中求胜敌我3倍伤害，我个人完成的战斗传送门是No.2 奥林帕斯-天界-天顶，里面只有2只小Boss怪，64攻67魔面板，3倍伤害下利用连结的超高比例减伤，可以轻松磨死</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>游戏</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>还原Hexo Blog以及Next主题配置</title>
+    <url>/2021/04/18/%E8%BF%98%E5%8E%9FHexo-Next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<hr>
+<span id="more"></span>
+
+<h6 id="安装hexo-asset-image模块"><a href="#安装hexo-asset-image模块" class="headerlink" title="安装hexo asset image模块"></a>安装hexo asset image模块</h6><p><code>npm install https://github.com/CodeFalling/hexo-asset-image --save</code></p>
+<h6 id="安装hexo-git部署模块"><a href="#安装hexo-git部署模块" class="headerlink" title="安装hexo git部署模块"></a>安装hexo git部署模块</h6><p><code>npm install hexo-deployer-git --save</code></p>
+<h6 id="安装hexo搜索模块"><a href="#安装hexo搜索模块" class="headerlink" title="安装hexo搜索模块"></a>安装hexo搜索模块</h6><p><code>npm install hexo-generator-searchdb</code></p>
+<h6 id="安装abbrlink模块"><a href="#安装abbrlink模块" class="headerlink" title="安装abbrlink模块"></a>安装abbrlink模块</h6><p>`npm install hexo-abbrlink –save``</p>
+<h6 id="安装sitemap模块"><a href="#安装sitemap模块" class="headerlink" title="安装sitemap模块"></a>安装sitemap模块</h6><p><code>npm install hexo-generator-sitemap --save</code></p>
+<h6 id="安装Next主题"><a href="#安装Next主题" class="headerlink" title="安装Next主题"></a>安装Next主题</h6><p><code>git clone https://github.com/theme-next/hexo-theme-next themes/next</code></p>
+<h6 id="Pace元素模块"><a href="#Pace元素模块" class="headerlink" title="Pace元素模块"></a>Pace元素模块</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd themes&#x2F;next</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace source&#x2F;lib&#x2F;pace</span><br></pre></td></tr></table></figure>
+
+<h6 id="Canvas-nest元素模块"><a href="#Canvas-nest元素模块" class="headerlink" title="Canvas-nest元素模块"></a>Canvas-nest元素模块</h6><p><code>touch source/_data/footer.swig</code></p>
+<p>添加文本内容</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script color&#x3D;&quot;0,0,255&quot; opacity&#x3D;&quot;0.5&quot; zIndex&#x3D;&quot;-1&quot; count&#x3D;&quot;99&quot; src&#x3D;&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;canvas-nest.js@1&#x2F;dist&#x2F;canvas-nest.js&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>编辑Next主题_config文件,将footer注释符去掉</p>
+<p><code>#footer: source/_data/footer.swig -&gt; footer: source/_data/footer.swig</code></p>
+]]></content>
+      <tags>
+        <tag>备忘</tag>
       </tags>
   </entry>
   <entry>
@@ -556,29 +581,6 @@
       <tags>
         <tag>技术</tag>
         <tag>随记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>还原Hexo Next主题配置</title>
-    <url>/2021/04/18/%E8%BF%98%E5%8E%9FHexo-Next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<hr>
-<span id="more"></span>
-
-<h6 id="安装hexo-asset-image模块"><a href="#安装hexo-asset-image模块" class="headerlink" title="安装hexo asset image模块"></a>安装hexo asset image模块</h6><p><code>npm install https://github.com/CodeFalling/hexo-asset-image --save</code></p>
-<h6 id="安装hexo-git部署模块"><a href="#安装hexo-git部署模块" class="headerlink" title="安装hexo git部署模块"></a>安装hexo git部署模块</h6><p><code>npm install hexo-deployer-git --save</code></p>
-<h6 id="安装hexo搜索模块"><a href="#安装hexo搜索模块" class="headerlink" title="安装hexo搜索模块"></a>安装hexo搜索模块</h6><p><code>npm install hexo-generator-searchdb</code></p>
-<h6 id="安装Next主题"><a href="#安装Next主题" class="headerlink" title="安装Next主题"></a>安装Next主题</h6><p><code>git clone https://github.com/theme-next/hexo-theme-next themes/next</code></p>
-<h6 id="Pace元素模块"><a href="#Pace元素模块" class="headerlink" title="Pace元素模块"></a>Pace元素模块</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd themes&#x2F;next</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace source&#x2F;lib&#x2F;pace</span><br></pre></td></tr></table></figure>
-
-<h6 id="Canvas-nest元素模块"><a href="#Canvas-nest元素模块" class="headerlink" title="Canvas-nest元素模块"></a>Canvas-nest元素模块</h6><p><code>touch source/_data/footer.swig</code></p>
-<p>添加文本内容</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script color&#x3D;&quot;0,0,255&quot; opacity&#x3D;&quot;0.5&quot; zIndex&#x3D;&quot;-1&quot; count&#x3D;&quot;99&quot; src&#x3D;&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;canvas-nest.js@1&#x2F;dist&#x2F;canvas-nest.js&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>编辑Next主题_config文件,将footer注释符去掉</p>
-<p><code>#footer: source/_data/footer.swig -&gt; footer: source/_data/footer.swig</code></p>
-]]></content>
-      <tags>
-        <tag>备忘</tag>
       </tags>
   </entry>
   <entry>
