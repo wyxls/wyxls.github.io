@@ -56,6 +56,8 @@
 
 <h6 id="②-部署时指定CNAME"><a href="#②-部署时指定CNAME" class="headerlink" title="②.部署时指定CNAME"></a>②.部署时指定CNAME</h6><p>在博客根目录下的source文件夹创建无扩展名的”CNAME”文件，在里面填入域名，部署到Github时就会自动更改GitHub Pages的自定义域名</p>
 <p>source/CNAME &lt;-<code>blog.domain.com</code></p>
+<img src="/2020/02/18/Hexo-Github%E6%89%98%E7%AE%A1-Windows-%E7%9A%84%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/HexoBlog.png" alt="HexoBlog" style="zoom:50%;">
+
 <p>在解析服务中添加CNAME解析</p>
 <table>
 <thead>
@@ -320,20 +322,31 @@
       </tags>
   </entry>
   <entry>
-    <title>王国之心3 Remind 快速通行代码全成就简易攻略</title>
-    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E5%BF%AB%E9%80%9F%E9%80%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%85%A8%E6%88%90%E5%B0%B1%E7%AE%80%E6%98%93%E6%94%BB%E7%95%A5/</url>
+    <title>配置免费图床Chevereto</title>
+    <url>/2020/11/11/%E8%87%AA%E5%BB%BA%E5%85%8D%E8%B4%B9%E5%9B%BE%E5%BA%8AChevereto/</url>
     <content><![CDATA[<hr>
 <span id="more"></span>
 
-<p>首先！快速通行代码的成就PS4奖杯没有难度要求，推荐使用简单难度完成</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.空中挑战：在空中击倒13个敌人，途中不能落地（魔法、连结、合作技、游乐设施特技动作击倒的敌人无效）</span><br><span class="line"></span><br><span class="line">2.暴怒形态挑战：以暴怒形态一次打倒20个“阴影”和”新型阴影“</span><br><span class="line"></span><br><span class="line">3.连结挑战：以任一连结一次打倒77个敌人</span><br><span class="line"></span><br><span class="line">4.破冰挑战：在同一场战斗中冰冻30个敌人</span><br><span class="line"></span><br><span class="line">5.基伽巨兵挑战：以任一游乐设施特技动作一次达到5架基伽巨兵</span><br><span class="line"></span><br><span class="line">6.空中漫步挑战：不走地面，并在5次落地内从森林高塔抵达科洛那的城镇</span><br><span class="line"></span><br><span class="line">7.墨黑幽魂挑战：驾驶积木船打倒潜藏在云雾星河的攻击卫星“墨黑幽魂”并以A阶级通关</span><br><span class="line"></span><br><span class="line">8.保龄球挑战：以合作动作“尖叫全倒”一次打倒10个敌人</span><br><span class="line"></span><br><span class="line">9.只开启战斗代码“险中求生”通过2星的任一战斗传送门</span><br></pre></td></tr></table></figure>
+<p>搭建环境</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker： Docker for windows 2.4.0.0 (Engine: 19.03.13, Compose: 1.27.4)</span><br><span class="line">Chevereto： Lastest（内含Nginx和PHP，linsxserver&#x2F;chevereto）</span><br><span class="line">Mariadb： Latest（mariadb:latest）</span><br></pre></td></tr></table></figure>
 
-<p>1、2、3、4理论上可以在键刃墓地“千人斩”战斗中完成，需要注意的是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.只要脚不落地都算在内，可以找敌人多而且能反复触发爬墙的场景完成，另外只能靠索拉本体平A击杀敌人。我个人认为比较早能完成的场景在奥林帕斯世界，有一处底下崩塌全是火，两侧都是爬墙的场景，前期留意把两个猪队友的伤害技能都关闭，不然会抢人头</span><br><span class="line"></span><br><span class="line">2.暴怒形态需要残血才会触发指令，建议带上“情绪崩堤”（残血时100%触发）</span><br><span class="line"></span><br><span class="line">3.连结挑战开启“持久连结”，时间延长至少一分钟，比较轻松能完成的场景：索拉拯救7位守护者心进入奥林帕斯世界时，路上全是阴影和新型阴影，另外就是千人斩部分</span><br><span class="line"></span><br><span class="line">4.破冰挑战的“冰冻”指的是暴雪魔法打中敌人出现冰冻效果，一发暴雪就打死敌人不计算在内，这个成就我个人最早能完成的场景是怪兽工厂倒数的某一次大场地战斗中，需要积攒欢笑能量，此处只要不触发尖叫全倒的RC指令，敌人就会无限刷新，注意前期不要等级刷得太高，魔法力太高会直接秒怪而不计算成就</span><br><span class="line"></span><br><span class="line">5.个人推荐场景在玩具商店3楼的儿童乐园处，此处刷出的机甲兵玩具不止5架，但要记住伤害要足</span><br><span class="line"></span><br><span class="line">6.建议在到达键刃墓地完成千人斩后拿到滑翔再做，途中触发爬墙是不计算5次落地内的，人物一旦落地千万别动左摇杆（个人惨痛经历），比较麻烦的只有一点：途中有一处大场景需要反复高跳到达高台（剧情中需要乐佩用头发荡2次那里）</span><br><span class="line"></span><br><span class="line">7.这个刷过积木船隐藏boss A评价的都知道怎么打，快速通行代码模式可以开局就拿到最强积木船金闪闪，然后就是一直刷boss的浮游护盾，一个护盾一万点分数，刷够100万分就是A评价</span><br><span class="line"></span><br><span class="line">8.怪兽公司限定，在两次需要积攒欢笑能量触发尖叫全倒的战斗中都可以比较轻松地完成，主要别让猪队友输出太高，怪物尽量集中，10只要求其实不怎么高</span><br><span class="line"></span><br><span class="line">9.通关后才会解锁显示的成就，险中求胜敌我3倍伤害，我个人完成的战斗传送门是No.2 奥林帕斯-天界-天顶，里面只有2只小Boss怪，64攻67魔面板，3倍伤害下利用连结的超高比例减伤，可以轻松磨死</span><br></pre></td></tr></table></figure>
+<h5 id="Chevereto"><a href="#Chevereto" class="headerlink" title="Chevereto"></a>Chevereto</h5><p><a href="https://github.com/Chevereto/Chevereto-Free">官方Github</a></p>
+<h6 id="Chevereto-compose-yml"><a href="#Chevereto-compose-yml" class="headerlink" title="Chevereto compose.yml"></a>Chevereto compose.yml</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  minio:</span><br><span class="line">    image: linuxserver&#x2F;chevereto</span><br><span class="line">    container_name: chevereto</span><br><span class="line">    environment:</span><br><span class="line">      - PUID&#x3D;1000</span><br><span class="line">      - PGID&#x3D;1000</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;chevereto&#x2F;config:&#x2F;config		# 挂载配置文件夹和日志文件夹</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;chevereto&#x2F;data:&#x2F;data			# 挂载数据文件夹</span><br><span class="line">    expose:									# 搭配跨容器反代用，容器自带Nginx，可改为端口转发的ports</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">      - &#39;443&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:									# 该networks段是为了跨nginx容器反代使用，可不要</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
 
-]]></content>
+<p>docker-compose up之后可访问<a href="http://localhost/%E8%AE%BF%E9%97%AE%E7%BD%91%E9%A1%B5%E5%88%9D%E5%A7%8B%E5%8C%96Chevereto">http://localhost/访问网页初始化Chevereto</a></p>
+<h6 id="使用SSL证书"><a href="#使用SSL证书" class="headerlink" title="使用SSL证书"></a>使用SSL证书</h6><p>镜像默认自签证书，如果需要使用自己的证书，就在/config/keys中放入证书和私钥文件并重启容器</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;config&#x2F;keys&#x2F;cert.crt</span><br><span class="line">&#x2F;config&#x2F;keys&#x2F;cert.key</span><br></pre></td></tr></table></figure>
+
+<h6 id="Chevereto初始化"><a href="#Chevereto初始化" class="headerlink" title="Chevereto初始化"></a>Chevereto初始化</h6><p>访问网页端，根据页面流程设置数据库地址、名称、账号、密码，设置Chevereto管理员账号、密码</p>
+<h6 id="配置Nginx实现非标准端口访问"><a href="#配置Nginx实现非标准端口访问" class="headerlink" title="配置Nginx实现非标准端口访问"></a>配置Nginx实现非标准端口访问</h6><p>网络拓补：运营商→Modem→主路由（拨号上网+10000端口转发到宿主机同端口）→Docker宿主机→Nginx容器（10000端口转发443）→Chevereto容器</p>
+<p>因为博主个人喜好使用单独的Nginx容器统一反代所有容器，这样就可以通过”服务名.xxx.com:10000”访问不同容器内的服务</p>
+<p>通过”chevereto.xxx.com:10000”可正常访问使用Chevereto</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;													# nginx容器自身监听443，外界通过容器的10000端口转发443访问</span><br><span class="line">    server_name chevereto.xxx.com;</span><br><span class="line">    error_page 497 https:&#x2F;&#x2F;$host:10000$request_uri;</span><br><span class="line"></span><br><span class="line">    ssl_certificate       &#x2F;config&#x2F;keys&#x2F;cert.cer;</span><br><span class="line">    ssl_certificate_key   &#x2F;config&#x2F;keys&#x2F;cert.key;</span><br><span class="line">    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">	</span><br><span class="line">    client_max_body_size 10m;</span><br><span class="line">    fastcgi_buffers 64 4K;</span><br><span class="line">    </span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;chevereto&#x2F;;</span><br><span class="line">        proxy_set_header Host $http_host;									# http_host关键</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="配置Chevereto"><a href="#配置Chevereto" class="headerlink" title="配置Chevereto"></a>配置Chevereto</h6><p>修改/config/php/php-local.ini改动图片最大上传大小</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">date.timezone &#x3D; Asia&#x2F;Shanghai </span><br><span class="line">upload_max_filesize &#x3D; 200M</span><br><span class="line">post_max_size &#x3D; 200M</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>游戏</tag>
+        <tag>技术</tag>
       </tags>
   </entry>
   <entry>
@@ -420,31 +433,20 @@
       </tags>
   </entry>
   <entry>
-    <title>配置免费图床Chevereto</title>
-    <url>/2020/11/11/%E8%87%AA%E5%BB%BA%E5%85%8D%E8%B4%B9%E5%9B%BE%E5%BA%8AChevereto/</url>
+    <title>王国之心3 Remind 快速通行代码全成就简易攻略</title>
+    <url>/2020/02/19/%E7%8E%8B%E5%9B%BD%E4%B9%8B%E5%BF%833-Remind-%E5%BF%AB%E9%80%9F%E9%80%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%85%A8%E6%88%90%E5%B0%B1%E7%AE%80%E6%98%93%E6%94%BB%E7%95%A5/</url>
     <content><![CDATA[<hr>
 <span id="more"></span>
 
-<p>搭建环境</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker： Docker for windows 2.4.0.0 (Engine: 19.03.13, Compose: 1.27.4)</span><br><span class="line">Chevereto： Lastest（内含Nginx和PHP，linsxserver&#x2F;chevereto）</span><br><span class="line">Mariadb： Latest（mariadb:latest）</span><br></pre></td></tr></table></figure>
+<p>首先！快速通行代码的成就PS4奖杯没有难度要求，推荐使用简单难度完成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.空中挑战：在空中击倒13个敌人，途中不能落地（魔法、连结、合作技、游乐设施特技动作击倒的敌人无效）</span><br><span class="line"></span><br><span class="line">2.暴怒形态挑战：以暴怒形态一次打倒20个“阴影”和”新型阴影“</span><br><span class="line"></span><br><span class="line">3.连结挑战：以任一连结一次打倒77个敌人</span><br><span class="line"></span><br><span class="line">4.破冰挑战：在同一场战斗中冰冻30个敌人</span><br><span class="line"></span><br><span class="line">5.基伽巨兵挑战：以任一游乐设施特技动作一次达到5架基伽巨兵</span><br><span class="line"></span><br><span class="line">6.空中漫步挑战：不走地面，并在5次落地内从森林高塔抵达科洛那的城镇</span><br><span class="line"></span><br><span class="line">7.墨黑幽魂挑战：驾驶积木船打倒潜藏在云雾星河的攻击卫星“墨黑幽魂”并以A阶级通关</span><br><span class="line"></span><br><span class="line">8.保龄球挑战：以合作动作“尖叫全倒”一次打倒10个敌人</span><br><span class="line"></span><br><span class="line">9.只开启战斗代码“险中求生”通过2星的任一战斗传送门</span><br></pre></td></tr></table></figure>
 
-<h5 id="Chevereto"><a href="#Chevereto" class="headerlink" title="Chevereto"></a>Chevereto</h5><p><a href="https://github.com/Chevereto/Chevereto-Free">官方Github</a></p>
-<h6 id="Chevereto-compose-yml"><a href="#Chevereto-compose-yml" class="headerlink" title="Chevereto compose.yml"></a>Chevereto compose.yml</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line"></span><br><span class="line">  minio:</span><br><span class="line">    image: linuxserver&#x2F;chevereto</span><br><span class="line">    container_name: chevereto</span><br><span class="line">    environment:</span><br><span class="line">      - PUID&#x3D;1000</span><br><span class="line">      - PGID&#x3D;1000</span><br><span class="line">      - TZ&#x3D;Asia&#x2F;Shanghai</span><br><span class="line">    volumes:</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;chevereto&#x2F;config:&#x2F;config		# 挂载配置文件夹和日志文件夹</span><br><span class="line">      - &#x2F;D&#x2F;Docker&#x2F;chevereto&#x2F;data:&#x2F;data			# 挂载数据文件夹</span><br><span class="line">    expose:									# 搭配跨容器反代用，容器自带Nginx，可改为端口转发的ports</span><br><span class="line">      - &#39;80&#39;</span><br><span class="line">      - &#39;443&#39;</span><br><span class="line">    networks:</span><br><span class="line">      - default</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">networks:									# 该networks段是为了跨nginx容器反代使用，可不要</span><br><span class="line">  default:</span><br><span class="line">    external:</span><br><span class="line">      name: shared</span><br></pre></td></tr></table></figure>
+<p>1、2、3、4理论上可以在键刃墓地“千人斩”战斗中完成，需要注意的是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.只要脚不落地都算在内，可以找敌人多而且能反复触发爬墙的场景完成，另外只能靠索拉本体平A击杀敌人。我个人认为比较早能完成的场景在奥林帕斯世界，有一处底下崩塌全是火，两侧都是爬墙的场景，前期留意把两个猪队友的伤害技能都关闭，不然会抢人头</span><br><span class="line"></span><br><span class="line">2.暴怒形态需要残血才会触发指令，建议带上“情绪崩堤”（残血时100%触发）</span><br><span class="line"></span><br><span class="line">3.连结挑战开启“持久连结”，时间延长至少一分钟，比较轻松能完成的场景：索拉拯救7位守护者心进入奥林帕斯世界时，路上全是阴影和新型阴影，另外就是千人斩部分</span><br><span class="line"></span><br><span class="line">4.破冰挑战的“冰冻”指的是暴雪魔法打中敌人出现冰冻效果，一发暴雪就打死敌人不计算在内，这个成就我个人最早能完成的场景是怪兽工厂倒数的某一次大场地战斗中，需要积攒欢笑能量，此处只要不触发尖叫全倒的RC指令，敌人就会无限刷新，注意前期不要等级刷得太高，魔法力太高会直接秒怪而不计算成就</span><br><span class="line"></span><br><span class="line">5.个人推荐场景在玩具商店3楼的儿童乐园处，此处刷出的机甲兵玩具不止5架，但要记住伤害要足</span><br><span class="line"></span><br><span class="line">6.建议在到达键刃墓地完成千人斩后拿到滑翔再做，途中触发爬墙是不计算5次落地内的，人物一旦落地千万别动左摇杆（个人惨痛经历），比较麻烦的只有一点：途中有一处大场景需要反复高跳到达高台（剧情中需要乐佩用头发荡2次那里）</span><br><span class="line"></span><br><span class="line">7.这个刷过积木船隐藏boss A评价的都知道怎么打，快速通行代码模式可以开局就拿到最强积木船金闪闪，然后就是一直刷boss的浮游护盾，一个护盾一万点分数，刷够100万分就是A评价</span><br><span class="line"></span><br><span class="line">8.怪兽公司限定，在两次需要积攒欢笑能量触发尖叫全倒的战斗中都可以比较轻松地完成，主要别让猪队友输出太高，怪物尽量集中，10只要求其实不怎么高</span><br><span class="line"></span><br><span class="line">9.通关后才会解锁显示的成就，险中求胜敌我3倍伤害，我个人完成的战斗传送门是No.2 奥林帕斯-天界-天顶，里面只有2只小Boss怪，64攻67魔面板，3倍伤害下利用连结的超高比例减伤，可以轻松磨死</span><br></pre></td></tr></table></figure>
 
-<p>docker-compose up之后可访问<a href="http://localhost/%E8%AE%BF%E9%97%AE%E7%BD%91%E9%A1%B5%E5%88%9D%E5%A7%8B%E5%8C%96Chevereto">http://localhost/访问网页初始化Chevereto</a></p>
-<h6 id="使用SSL证书"><a href="#使用SSL证书" class="headerlink" title="使用SSL证书"></a>使用SSL证书</h6><p>镜像默认自签证书，如果需要使用自己的证书，就在/config/keys中放入证书和私钥文件并重启容器</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;config&#x2F;keys&#x2F;cert.crt</span><br><span class="line">&#x2F;config&#x2F;keys&#x2F;cert.key</span><br></pre></td></tr></table></figure>
-
-<h6 id="Chevereto初始化"><a href="#Chevereto初始化" class="headerlink" title="Chevereto初始化"></a>Chevereto初始化</h6><p>访问网页端，根据页面流程设置数据库地址、名称、账号、密码，设置Chevereto管理员账号、密码</p>
-<h6 id="配置Nginx实现非标准端口访问"><a href="#配置Nginx实现非标准端口访问" class="headerlink" title="配置Nginx实现非标准端口访问"></a>配置Nginx实现非标准端口访问</h6><p>网络拓补：运营商→Modem→主路由（拨号上网+10000端口转发到宿主机同端口）→Docker宿主机→Nginx容器（10000端口转发443）→Chevereto容器</p>
-<p>因为博主个人喜好使用单独的Nginx容器统一反代所有容器，这样就可以通过”服务名.xxx.com:10000”访问不同容器内的服务</p>
-<p>通过”chevereto.xxx.com:10000”可正常访问使用Chevereto</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;													# nginx容器自身监听443，外界通过容器的10000端口转发443访问</span><br><span class="line">    server_name chevereto.xxx.com;</span><br><span class="line">    error_page 497 https:&#x2F;&#x2F;$host:10000$request_uri;</span><br><span class="line"></span><br><span class="line">    ssl_certificate       &#x2F;config&#x2F;keys&#x2F;cert.cer;</span><br><span class="line">    ssl_certificate_key   &#x2F;config&#x2F;keys&#x2F;cert.key;</span><br><span class="line">    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">	</span><br><span class="line">    client_max_body_size 10m;</span><br><span class="line">    fastcgi_buffers 64 4K;</span><br><span class="line">    </span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;chevereto&#x2F;;</span><br><span class="line">        proxy_set_header Host $http_host;									# http_host关键</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h6 id="配置Chevereto"><a href="#配置Chevereto" class="headerlink" title="配置Chevereto"></a>配置Chevereto</h6><p>修改/config/php/php-local.ini改动图片最大上传大小</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">date.timezone &#x3D; Asia&#x2F;Shanghai </span><br><span class="line">upload_max_filesize &#x3D; 200M</span><br><span class="line">post_max_size &#x3D; 200M</span><br></pre></td></tr></table></figure>]]></content>
+]]></content>
       <tags>
-        <tag>技术</tag>
+        <tag>游戏</tag>
       </tags>
   </entry>
   <entry>
@@ -625,6 +627,8 @@
 <li>访问<a href="https://domain.com:10002/">https://domain.com:10002</a>，以管理员账号登录，点击右上角头像进入“系统管理”，输入密码后左侧点击“设置”</li>
 </ol>
 <p>修改以下部分 (如果修改错误的话，会无法正常使用网页界面和下载/上传文件)</p>
+<img src="/2020/03/07/%E6%90%AD%E5%BB%BASeafile-WinServer-2019-Docker-for-Windows/Seafile-系统设置.png" alt="Seafile-系统设置" style="zoom: 80%;">
+
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SERVICE_URL				https:&#x2F;&#x2F;domain.com:10002</span><br><span class="line">FILE_SERVER_ROOT		https:&#x2F;&#x2F;domain.com:10002&#x2F;seafhttp</span><br></pre></td></tr></table></figure>
 
 <ol start="4">
